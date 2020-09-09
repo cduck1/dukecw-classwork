@@ -10,6 +10,6 @@ litres = float(input())
 gallonsmile = (litres*gallon)/milestravelled 
 print("Your car consumes",gallonsmile,"gallons per mile.")
 
-#i) the gallon can be defined as a constant so that it can be easier to write than the number needed in a calculation
-#ii)the miles can be integers as the car's mileage only increases by integer values
-#iii) the number of litres needed to fill the tank can be a decimal as the tank is not always going to take an integer amount of litres to fill.
+#i) The gallon can be defined as a constant as it never changes. The advantage of doing this is that it is easier to write "gallon" than the number needed in the calculation.
+#ii) The mileage can be defined as an integer as the car's mileage only increases by integer values.
+#iii) The number of litres needed to fill the tank can be defined as a decimal as the tank will not always take an integer amount of litres to fill.
