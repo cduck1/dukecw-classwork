@@ -13,3 +13,6 @@ layers = int(input())
 paintneeded = ((totaldimensions - unpaintdimensions)*layers)/11
 print("You need", paintneeded,"litres of paint.")
 
+## ACS - Add annotations
+## ACS - Logic works well except I think 2nd wall needs height and width.
+## ACS - you might have considered asking how many walls!
