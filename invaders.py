@@ -20,6 +20,8 @@ done = False
 # -- Variables
 bullet_count = 500
 score = 0
+lives = 10
+print("Lives: " + str(lives))
 # Create a list of the invader blocks
 invader_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
@@ -32,7 +34,7 @@ clock = pygame.time.Clock()
 # -- Define the class invader which is a sprite
 class invader(pygame.sprite.Sprite):
     # Define the constructor for invader
-    def __init__(self, color, width, height, speed):
+    def __init__(self, color, width, height, speed, x, y):
         # Set the speed of the sprite
         self.speed = speed
         # Call the sprite constructor
@@ -42,8 +44,8 @@ class invader(pygame.sprite.Sprite):
         self.image.fill(color)
         # Set the position of the sprite
         self.rect = self.image.get_rect()
-        self.rect.x = random.randrange(0, 600)
-        self.rect.y = random.randrange(-50, 0)
+        self.rect.x = x
+        self.rect.y = y
         self.speed = 1
     #End Procedure
     def update(self):
@@ -102,7 +104,7 @@ class bullet(pygame.sprite.Sprite):
 # Create the invaderships
 number_of_ships = 10 # we are creating 50 invaders
 for x in range (number_of_ships):
-    my_invader = invader(BLUE, 10, 10, 1) # invaderships are white with size 5 by 5 px
+    my_invader = invader(BLUE, 10, 10, 1, random.randrange(0, 600), random.randrange(-50, 0)) # invaderships are white with size 5 by 5 px
     invader_group.add(my_invader) # adds the new invadership to the group of invaderships
     all_sprites_group.add(my_invader) # adds it to the group of all Sprites
 #Next
@@ -145,6 +147,13 @@ while not done:
         if bullet_hit_group == True:
             score = score + 5
             print("Score: " + str(score))
+    if my_invader.rect.y == 480:
+        lives = lives - 1
+        print("Lives: " + str(lives))
+    #end the game when the player's lives are 0
+    if lives == 0:
+        print("NO LIVES")
+        done = True
     # -- Screen background is BLACK
     screen.fill (BLACK)
     # -- Draw here
