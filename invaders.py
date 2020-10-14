@@ -89,8 +89,8 @@ class bullet(pygame.sprite.Sprite):
         self.image.fill(color)
         # Set the position of the sprite
         self.rect = self.image.get_rect()
-        self.rect.x = 0
-        self.rect.y = 0
+        self.rect.x = x
+        self.rect.y = y
         self.speed = 2
         #End Procedure
     def update(self):
