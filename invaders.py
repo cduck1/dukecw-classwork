@@ -17,13 +17,13 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Invader")
 # -- Exit game flag set to false
 done = False
+# -- Variables
+bullet_count = 500
+score = 0
 # Create a list of the invader blocks
 invader_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 bullet_group = pygame.sprite.Group()
-#variables
-bullet_count = 50
-score = 0
 # Create a list of all sprites
 all_sprites_group = pygame.sprite.Group()
 # -- Manages how fast screen refreshes
@@ -125,7 +125,7 @@ while not done:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP]:
         # Create the bullet
-        my_bullet = bullet(RED, 2, 2, my_player.rect.x, my_player.rect.y)
+        my_bullet = bullet(RED, 2, 2, (my_player.rect.x) + 4, my_player.rect.y)
         bullet_group.add(my_bullet)
         all_sprites_group.add(my_bullet)
         bullet_count = bullet_count - 1
@@ -141,7 +141,7 @@ while not done:
     player_hit_group = pygame.sprite.spritecollide(my_player, invader_group, True)
     # -- when invader hits the bullet add 5 to score.
     for my_bullet in bullet_group:
-        bullet_hit_group = pygame.sprite.spritecollide(my_bullet, invader_group, True)
+        bullet_hit_group = pygame.sprite.groupcollide(bullet_group, invader_group, True, True)
         if bullet_hit_group == True:
             score = score + 5
             print("Score: " + str(score))
