@@ -18,7 +18,7 @@ pygame.display.set_caption("Invader")
 # -- Exit game flag set to false
 done = False
 # -- Variables
-bullet_count = 500
+bullet_count = 100
 score = 0
 lives = 10
 print("Lives: " + str(lives))
@@ -30,7 +30,6 @@ bullet_group = pygame.sprite.Group()
 all_sprites_group = pygame.sprite.Group()
 # -- Manages how fast screen refreshes
 clock = pygame.time.Clock()
-
 # -- Define the class invader which is a sprite
 class invader(pygame.sprite.Sprite):
     # Define the constructor for invader
@@ -52,7 +51,7 @@ class invader(pygame.sprite.Sprite):
         self.rect.y = self.rect.y + self.speed
 #End Class
 
-# -- Define the class player which is a sprite
+    # -- Define the class player which is a sprite
 class player(pygame.sprite.Sprite):
     # Define the constructor for invader
     def __init__(self, color, width, height):
@@ -97,9 +96,10 @@ class bullet(pygame.sprite.Sprite):
         #End Procedure
     def update(self):
         self.rect.y -= 3
-        
+            
     #End Procedure 
 #End Class
+
 
 # Create the invaderships
 number_of_ships = 10 # we are creating 50 invaders
@@ -108,7 +108,7 @@ for x in range (number_of_ships):
     invader_group.add(my_invader) # adds the new invadership to the group of invaderships
     all_sprites_group.add(my_invader) # adds it to the group of all Sprites
 #Next
-    
+            
 # Create the player
 my_player = player(YELLOW, 10, 10)
 player_group.add(my_player)
@@ -136,7 +136,7 @@ while not done:
         my_player.moveLeft(3)
     if keys[pygame.K_RIGHT]:
         my_player.moveRight(3)
-                
+                    
     # -- Game logic goes after this comment
     all_sprites_group.update()
     # -- when invader hits the player add 5 to score.
@@ -150,6 +150,7 @@ while not done:
     if my_invader.rect.y == 480:
         lives = lives - 1
         print("Lives: " + str(lives))
+        
     #end the game when the player's lives are 0
     if lives == 0:
         print("NO LIVES")
@@ -160,7 +161,7 @@ while not done:
     all_sprites_group.draw(screen)
     # -- flip display to reveal new position of objects
     pygame.display.flip()
-     # - The clock ticks over
+    # - The clock ticks over
     clock.tick(60)
     #End While - End of game loop
 pygame.quit()
