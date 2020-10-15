@@ -15,10 +15,6 @@ size = (640,480)
 screen = pygame.display.set_mode(size)
 # -- Title of new window/screen
 pygame.display.set_caption("Invader")
-# -- Exit game flag set to false
-done = False
-# -- Variables
-bullet_count = 100
 score = 0
 lives = 10
 print("Lives: " + str(lives))
@@ -26,6 +22,7 @@ print("Lives: " + str(lives))
 invader_group = pygame.sprite.Group()
 player_group = pygame.sprite.Group()
 bullet_group = pygame.sprite.Group()
+deathbarrier_group = pygame.sprite.Group()
 # Create a list of all sprites
 all_sprites_group = pygame.sprite.Group()
 # -- Manages how fast screen refreshes
@@ -95,73 +92,97 @@ class bullet(pygame.sprite.Sprite):
         self.speed = 2
         #End Procedure
     def update(self):
-        self.rect.y -= 3
-            
+        self.rect.y -= 3            
     #End Procedure 
 #End Class
 
+class deathBarrier(pygame.sprite.Sprite):
+    def __init__(self,color,width,height):
+        super().__init__()
+        self.image = pygame.Surface([width,height])
+        self.image.fill(color)
+        self.rect = self.image.get_rect()
+        #start of the death barrier is at at the bottom left of the screen 
+        self.rect.y = 480
+        self.rect.x = 0
 
-# Create the invaderships
-number_of_ships = 10 # we are creating 50 invaders
-for x in range (number_of_ships):
-    my_invader = invader(BLUE, 10, 10, 1, random.randrange(0, 600), random.randrange(-50, 0)) # invaderships are white with size 5 by 5 px
-    invader_group.add(my_invader) # adds the new invadership to the group of invaderships
-    all_sprites_group.add(my_invader) # adds it to the group of all Sprites
-#Next
-            
-# Create the player
-my_player = player(YELLOW, 10, 10)
-player_group.add(my_player)
-all_sprites_group.add(my_player)
-
-# -- Game Loop
-while not done:
-    # -- User input and controls
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
-        elif event.type == pygame.KEYDOWN: # - a key is down
-            if event.key == pygame.K_ESCAPE: # - if the escape key pressed
-                done = True
-            #End If
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_UP]:
-        # Create the bullet
-        my_bullet = bullet(RED, 2, 2, (my_player.rect.x) + 4, my_player.rect.y)
-        bullet_group.add(my_bullet)
-        all_sprites_group.add(my_bullet)
-        bullet_count = bullet_count - 1
-        print("Bullet count: " + str(bullet_count))
-    if keys[pygame.K_LEFT]:
-        my_player.moveLeft(3)
-    if keys[pygame.K_RIGHT]:
-        my_player.moveRight(3)
-                    
-    # -- Game logic goes after this comment
-    all_sprites_group.update()
-    # -- when invader hits the player add 5 to score.
-    player_hit_group = pygame.sprite.spritecollide(my_player, invader_group, True)
-    # -- when invader hits the bullet add 5 to score.
-    for my_bullet in bullet_group:
-        bullet_hit_group = pygame.sprite.groupcollide(bullet_group, invader_group, True, True)
-        if bullet_hit_group == True:
-            score = score + 5
-            print("Score: " + str(score))
-    if my_invader.rect.y == 480:
-        lives = lives - 1
-        print("Lives: " + str(lives))
-        
+def gameLoop(lives, score):
+    # -- Exit game flag set to false
+    done = False
+    # -- Variables
+    bullet_count = 100
+    
     #end the game when the player's lives are 0
     if lives == 0:
-        print("NO LIVES")
+        print("NO LIVES. GAME OVER.")
         done = True
-    # -- Screen background is BLACK
-    screen.fill (BLACK)
-    # -- Draw here
-    all_sprites_group.draw(screen)
-    # -- flip display to reveal new position of objects
-    pygame.display.flip()
-    # - The clock ticks over
-    clock.tick(60)
-    #End While - End of game loop
+
+    # Create the invaderships
+    number_of_ships = 10 # we are creating 50 invaders
+    for x in range (number_of_ships):
+        my_invader = invader(BLUE, 10, 10, 1, random.randrange(0, 600), random.randrange(-50, 0)) # invaderships are white with size 5 by 5 px
+        invader_group.add(my_invader) # adds the new invadership to the group of invaderships
+        all_sprites_group.add(my_invader) # adds it to the group of all Sprites
+    #Next
+                
+    # Create the player
+    my_player = player(YELLOW, 10, 10)
+    player_group.add(my_player)
+    all_sprites_group.add(my_player)
+
+    # create the death barrier
+    my_deathbarrier = deathBarrier(RED, 640, 1)
+    deathbarrier_group.add(my_deathbarrier)
+    all_sprites_group.add(my_deathbarrier)
+
+    # -- Game Loop
+    while not done:
+        # -- User input and controls
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+            elif event.type == pygame.KEYDOWN: # - a key is down
+                if event.key == pygame.K_ESCAPE: # - if the escape key pressed
+                    done = True
+                #End If
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP]:
+            # Create the bullet
+            my_bullet = bullet(RED, 2, 2, (my_player.rect.x) + 4, my_player.rect.y)
+            bullet_group.add(my_bullet)
+            all_sprites_group.add(my_bullet)
+            bullet_count = bullet_count - 1
+            print("Bullet count: " + str(bullet_count))
+        if keys[pygame.K_LEFT]:
+            my_player.moveLeft(3)
+        if keys[pygame.K_RIGHT]:
+            my_player.moveRight(3)
+                        
+        # -- Game logic goes after this comment
+        all_sprites_group.update()
+        # -- when invader hits the player add 5 to score.
+        player_hit_group = pygame.sprite.spritecollide(my_player, invader_group, True)
+        # -- when invader hits the bullet add 5 to score.
+        for my_bullet in bullet_group:
+            if pygame.sprite.groupcollide(bullet_group, invader_group, True, True):
+                score = score + 5
+                print("Score: " + str(score))
+
+        if pygame.sprite.spritecollide(my_deathbarrier, invader_group, False):
+            lives = lives - 1
+            print("Lives: " + str(lives))
+            for my_invader in invader_group:
+                my_invader.rect.y = random.randrange(-50, 0)
+            gameLoop(lives, score)
+            
+        # -- Screen background is BLACK
+        screen.fill (BLACK)
+        # -- Draw here
+        all_sprites_group.draw(screen)
+        # -- flip display to reveal new position of objects
+        pygame.display.flip()
+        # - The clock ticks over
+        clock.tick(60)
+        #End While - End of game loop
+gameLoop(lives, score)
 pygame.quit()
