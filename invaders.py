@@ -93,7 +93,7 @@ class bullet(pygame.sprite.Sprite):
         #End Procedure
     def update(self):
         self.rect.y -= 3            
-    #End Procedure 
+    #End Procedure
 #End Class
 
 class deathBarrier(pygame.sprite.Sprite):
@@ -173,6 +173,7 @@ def gameLoop(lives, score):
             print("Lives: " + str(lives))
             for my_invader in invader_group:
                 my_invader.rect.y = random.randrange(-50, 0)
+            my_player.kill()
             gameLoop(lives, score)
             
         # -- Screen background is BLACK
