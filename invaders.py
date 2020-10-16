@@ -16,7 +16,7 @@ screen = pygame.display.set_mode(size)
 # -- Title of new window/screen
 pygame.display.set_caption("Invader")
 score = 0
-lives = 10
+lives = 3
 print("Lives: " + str(lives))
 # Create a list of the invader blocks
 invader_group = pygame.sprite.Group()
@@ -48,7 +48,7 @@ class invader(pygame.sprite.Sprite):
         self.rect.y = self.rect.y + self.speed
 #End Class
 
-    # -- Define the class player which is a sprite
+# -- Define the class player which is a sprite
 class player(pygame.sprite.Sprite):
     # Define the constructor for invader
     def __init__(self, color, width, height):
