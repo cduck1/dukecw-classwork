@@ -135,21 +135,6 @@ def gameLoop(lives, score):
     deathbarrier_group.add(my_deathbarrier)
     all_sprites_group.add(my_deathbarrier)
 
-    #display lives
-    font = pygame.font.Font('freesansbold.ttf', 50)
-    text = font.render(("LIVES: " + str(lives)), 1, WHITE)
-    screen.blit(text, (10, 10))
-
-    #display bullet count
-    font = pygame.font.Font('freesansbold.ttf', 50)
-    text = font.render(("BULLETS: " + str(bullet_count)), 1, WHITE)
-    screen.blit(text, (10, 70))
-
-    #display score
-    font = pygame.font.Font('freesansbold.ttf', 50)
-    text = font.render(("SCORE: " + str(score)), 1, WHITE)
-    screen.blit(text, (10, 130))
-
     # Game Loop
     while not done:
         # -- User input and controls
@@ -184,24 +169,39 @@ def gameLoop(lives, score):
                 print("Score: " + str(score))
                 
         # when the the invader hits the deathbarrier, or hits the player, the gameLoop is restarted 
-        if pygame.sprite.spritecollide(my_deathbarrier, invader_group, True) or (pygame.sprite.spritecollide(my_player, invader_group, True)):
+        if (pygame.sprite.spritecollide(my_deathbarrier, invader_group, True)) or (pygame.sprite.spritecollide(my_player, invader_group, True)):
             lives = lives - 1
-            print("Lives: " + str(lives))
-            for my_invader in invader_group:
-                my_invader.rect.y = random.randrange(-50, 0)
-            #removes the sprites
-            my_player.kill()
-            gameLoop(lives, score)
-
-        # display the GAME OVER screen when lives = 0 
-        if lives == 0:
-            gameOver()
-            done = True
+            # display the GAME OVER screen when lives = 0 
+            if lives == 0:
+                print("GAME OVER")
+                gameOver()
+                done = True
+            elif lives != 0:
+                print("Lives: " + str(lives))
+                for my_invader in invader_group:
+                    my_invader.rect.y = random.randrange(-50, 0)
+                #removes the sprites
+                my_player.kill()
+                gameLoop(lives, score)
             
         # -- Screen background is BLACK
         screen.fill(BLACK)
         # -- Draw here
         all_sprites_group.draw(screen)
+        #display lives
+        font = pygame.font.Font('freesansbold.ttf', 10)
+        text = font.render(("LIVES: " + str(lives)), 1, WHITE)
+        screen.blit(text, (10, 15))
+
+        #display bullet count
+        font = pygame.font.Font('freesansbold.ttf', 10)
+        text = font.render(("BULLETS: " + str(bullet_count)), 1, WHITE)
+        screen.blit(text, (10, 25))
+
+        #display score
+        font = pygame.font.Font('freesansbold.ttf', 10)
+        text = font.render(("SCORE: " + str(score)), 1, WHITE)
+        screen.blit(text, (10, 35))
         # -- flip display to reveal new position of objects
         pygame.display.flip()
         # - The clock ticks over
@@ -209,12 +209,22 @@ def gameLoop(lives, score):
         #End While - End of game loop
 
 def gameOver():
-    screen.fill(BLACK)
-    font = pygame.font.Font('freesansbold.ttf', 50)
-    text = font.render("GAME OVER", 1, WHITE)
-    screen.blit(text, (300, 10))
-    print("GAME OVER")
-    clock.tick(60)
+    done = False
+    while not done:
+        # -- User input and controls
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                done = True
+            elif event.type == pygame.KEYDOWN: # when a key is down
+                if event.key == pygame.K_ESCAPE: # if the escape key pressed done = True
+                    done = True
+                #End If
+        screen.fill(BLACK)
+        font = pygame.font.Font('freesansbold.ttf', 50)
+        text = font.render("GAME OVER", 1, WHITE)
+        screen.blit(text, (160, 200))
+        pygame.display.flip()
+        clock.tick(60)
     
 gameLoop(lives, score)
 pygame.quit()
