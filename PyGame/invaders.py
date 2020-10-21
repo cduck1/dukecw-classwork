@@ -94,7 +94,7 @@ class bullet(pygame.sprite.Sprite):
         self.speed = 2
         #End Procedure
     def update(self):
-        self.rect.y -= 3            
+        self.rect.y -= 3
     #End Procedure
 #End Class
 
@@ -167,6 +167,8 @@ def gameLoop(lives, score):
             if pygame.sprite.groupcollide(bullet_group, invader_group, True, True):
                 score = score + 5
                 print("Score: " + str(score))
+            if my_bullet.rect.y < 0:
+                bullet_group.remove(my_bullet)
                 
         # when the the invader hits the deathbarrier, or hits the player, the gameLoop is restarted 
         if (pygame.sprite.spritecollide(my_deathbarrier, invader_group, True)) or (pygame.sprite.spritecollide(my_player, invader_group, True)):
