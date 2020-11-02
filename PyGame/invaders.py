@@ -155,9 +155,9 @@ def gameLoop(lives, score):
                 bullet_count = bullet_count - 1
                 print("Bullet count: " + str(bullet_count))
         if keys[pygame.K_LEFT]:
-            my_player.moveLeft(3)
+            my_player.moveLeft(2)
         if keys[pygame.K_RIGHT]:
-            my_player.moveRight(3)
+            my_player.moveRight(2)
                         
         # Game logic goes after this comment
         all_sprites_group.update()
