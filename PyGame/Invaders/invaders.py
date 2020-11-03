@@ -121,7 +121,7 @@ def gameLoop(lives, score):
     # Create the invaderships
     number_of_ships = 10 # we are creating 10 invaders
     for x in range (number_of_ships):
-        my_invader = invader(BLUE, 10, 10, 1, random.randrange(0, 600), random.randrange(-50, 0)) # invaderships are white with size 10 by 10 px
+        my_invader = invader(BLUE, 15, 15, 1, random.randrange(0, 600), random.randrange(-50, 0)) # invaderships are white with size 10 by 10 px
         invader_group.add(my_invader) # adds the new invadership to the group of invaderships
         all_sprites_group.add(my_invader) # adds it to the group of all Sprites
                 
@@ -145,15 +145,15 @@ def gameLoop(lives, score):
                 if event.key == pygame.K_ESCAPE: # if the escape key pressed done = True
                     done = True
                 #End If
-        keys = pygame.key.get_pressed()
         # create the bullet when the up arrow is pressed
-        if bullet_count != 0:
-            if keys[pygame.K_UP]:
-                my_bullet = bullet(RED, 2, 2, (my_player.rect.x) + 4, my_player.rect.y)
-                bullet_group.add(my_bullet)
-                all_sprites_group.add(my_bullet)
-                bullet_count = bullet_count - 1
-                print("Bullet count: " + str(bullet_count))
+                if bullet_count != 0:
+                    if event.key == pygame.K_UP:
+                        my_bullet = bullet(RED, 2, 2, (my_player.rect.x) + 4, my_player.rect.y)
+                        bullet_group.add(my_bullet)
+                        all_sprites_group.add(my_bullet)
+                        bullet_count = bullet_count - 1
+                        print("Bullet count: " + str(bullet_count))
+        keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             my_player.moveLeft(2)
         if keys[pygame.K_RIGHT]:
