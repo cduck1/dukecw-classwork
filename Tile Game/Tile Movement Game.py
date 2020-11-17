@@ -26,7 +26,7 @@ clock = pygame.time.Clock()
 # Making the player class
 class player(pygame.sprite.Sprite):
     # Define the constructor for the invader
-    def __init__(self, color, width, height, x, y, speed):
+    def __init__(self, myColor, myWidth, myHeight, myX, myY, mySpeed):
         # Call the super class (the super class for the player is sprite)
         super().__init__()
         # Create a sprite and fill it with a colour
