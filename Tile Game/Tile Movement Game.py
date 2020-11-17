@@ -22,6 +22,7 @@ done = False
 # CREATE GROUPS
 # Create groups for each sprite
 player_group = pygame.sprite.Group()
+wall_group = pygame.sprite.Group()
 # Create a group of all sprites together
 all_sprites_group = pygame.sprite.Group()
 
@@ -57,28 +58,45 @@ class player(pygame.sprite.Sprite):
 # Making the wall class
 class wall(pygame.sprite.Sprite):
     # Define the constructor for the wall class
-    def __init__(self, color, width, height):
+    def __init__(self, color, width, height, x, y):
         super().__init__()
-        # Create a sprite an fill it with the colour
+        # Create a sprite an fill it with the colour with x and y values
         self.image = pygame.Surface([width,height])
         self.image.fill(color)
-
-
+        self.rect.x = x
+        self.rect.y = y
 
 # INSTANTATION CODE
 # Instantiate the player class - colour, width, height, x, y, speed
 myPlayer = player(BLUE, 40, 40)
+# Add the player to a player group and an all sprites group
+player_group.add(myPlayer)
+all_sprites_group.add(myPlayer)
 
 # Creating the walls using a list 
 # Plan for creating the walls: have a list of 625 items, create wall at a specific x and y coordinates if there is a 1; once you get to the 25th element (to the end of the screen), go you down 40 pixels and start at x coord 0
 # Rows are sets of 25 elements
+# There are 625 total elements because each element represent a block of 40 by 40 and 25 x 25 = 625
 # 25 1s = 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 wall_present = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+for i in range (0,624):
+    # temp_x and temp_y are the temporary values where the wall will be created for that iteration of the for loop, so if there is a 1 at that position, it will be created at a different x and y each time
+    # We have an if i == 0 here because we need the walls to start at zero, if it didnt we would start with temp_x = temp_x + 40 and so fourth
+    if i == 0:
+        temp_x = 0
+        temp_y = 0
+    else:
+        temp_x = temp_x + 40
+        temp_y = temp_y + 40
 
-myWall = wall(RED, 40, 40)
-# Add the player to a player group and an all sprites group
-player_group.add(myPlayer)
-all_sprites_group.add(myPlayer)
+    # Trying to figure out a way to go down one like when i is a multiple of 24 (each like is )
+    if (((i * 25) - 1) MOD 25) = 0
+
+    if wall_present[i] == 1:
+        myWall = wall(RED, 40, 40, temp_x, temp_y)
+        wall_group.add(myWall)
+        all_sprites_group.add(myWall)
+
 
 # MAIN PROGRAM LOOP
 while not done:
