@@ -63,6 +63,7 @@ class wall(pygame.sprite.Sprite):
         # Create a sprite an fill it with the colour with x and y values
         self.image = pygame.Surface([width,height])
         self.image.fill(color)
+        self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
@@ -87,11 +88,13 @@ for i in range (0,624):
         temp_y = 0
     else:
         temp_x = temp_x + 40
+        
+
+    # Increases the y value (goes down to the next row of walls) once the row is filled (after 25 elements in the list)
+    if (i + 2) % 25 == 0:
+        temp_x = 0
         temp_y = temp_y + 40
-
-    # Trying to figure out a way to go down one like when i is a multiple of 24 (each like is )
-    if (((i * 25) - 1) MOD 25) = 0
-
+        
     if wall_present[i] == 1:
         myWall = wall(RED, 40, 40, temp_x, temp_y)
         wall_group.add(myWall)
