@@ -91,7 +91,7 @@ for i in range (0,624):
         
 
     # Increases the y value (goes down to the next row of walls) once the row is filled (after 25 elements in the list)
-    if (i + 2) % 25 == 0:
+    if (i + 1) % 25 == 0:
         temp_x = 0
         temp_y = temp_y + 40
         
