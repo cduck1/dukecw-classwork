@@ -43,7 +43,18 @@ class player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 500
         self.rect.y = 500
-    #def update(self):
+    def update(self):
+        for wall in wall_group:
+            if pygame.sprite.collide_rect(self,wall):
+                if speed > 0:
+                    self.rect.right = wall.rect.left
+                if speed > 0:
+                    self.rect.left = wall.rect.right
+                if speed > 0:
+                    self.rect.top = wall.rect.bottom
+                if speed > 0:
+                    self.rect.bottom = wall.rect.top
+
 
     # Procedure for what happens when the right and left arrow key is pressed
     def moveRight(self, speed):
@@ -55,10 +66,10 @@ class player(pygame.sprite.Sprite):
     def moveDown(self, speed):
         self.rect.y += speed
     # Getter method for the x and y coords of the sprite
-    def getX(self):
-        return self.rect.x
-    def getY(self):
-        return self.rect.y 
+    #def getX(self):
+    #    return self.rect.x
+    #def getY(self):
+    #    return self.rect.y 
 
 # Making the wall class
 class wall(pygame.sprite.Sprite):
@@ -126,10 +137,6 @@ while not done:
  
     # Game logic should go here
     all_sprites_group.update()
-
-    if pygame.sprite.spritecollide(myPlayer, wall_group, False):
-        player.getX()
-
 
     # Screen-clearing code goes here
  
