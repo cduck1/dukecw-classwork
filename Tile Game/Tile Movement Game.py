@@ -54,6 +54,11 @@ class player(pygame.sprite.Sprite):
         self.rect.y -= speed
     def moveDown(self, speed):
         self.rect.y += speed
+    # Getter method for the x and y coords of the sprite
+    def getX(self):
+        return self.rect.x
+    def getY(self):
+        return self.rect.y 
 
 # Making the wall class
 class wall(pygame.sprite.Sprite):
@@ -121,6 +126,11 @@ while not done:
  
     # Game logic should go here
     all_sprites_group.update()
+
+    if pygame.sprite.spritecollide(myPlayer, wall_group, False):
+        player.getX()
+
+
     # Screen-clearing code goes here
  
     # Here, we clear the screen to white. Don't put other drawing commands
