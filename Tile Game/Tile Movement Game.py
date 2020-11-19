@@ -111,7 +111,7 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
     keys = pygame.key.get_pressed()
-    while not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
+    if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
         if keys[pygame.K_LEFT]:
             myPlayer.moveLeft(20)
         if keys[pygame.K_RIGHT]:
