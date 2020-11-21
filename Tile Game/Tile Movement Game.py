@@ -47,26 +47,25 @@ class player(pygame.sprite.Sprite):
 
     # Procedure for what happens when the right and left arrow key is pressed
     def moveRight(self, x_speed):
-        if pygame.sprite.spritecollide(myPlayer,wall_group,False):
-            self.rect.x -= 20
-        else:
+        if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
             self.rect.x += x_speed
-
-    def moveLeft(self, x_speed):
-        if pygame.sprite.spritecollide(myPlayer,wall_group,False):
-            self.rect.x += 20
         else:
             self.rect.x -= x_speed
+    def moveLeft(self, x_speed):
+        if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
+            self.rect.x -= x_speed
+        else:
+            self.rect.x += x_speed
     def moveUp(self, y_speed):
-        if pygame.sprite.spritecollide(myPlayer,wall_group,False):
-            self.rect.y += 20
-        else:
+        if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
             self.rect.y -= y_speed
-    def moveDown(self, y_speed):
-        if pygame.sprite.spritecollide(myPlayer,wall_group,False):
-            self.rect.y -= 20
         else:
+            self.rect.y += 20
+    def moveDown(self, y_speed):
+        if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
             self.rect.y += y_speed
+        else:
+            self.rect.y -= 20
 
 # Making the wall class
 class wall(pygame.sprite.Sprite):
