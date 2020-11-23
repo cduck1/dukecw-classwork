@@ -44,8 +44,7 @@ class player(pygame.sprite.Sprite):
         self.rect.x = 500
         self.rect.y = 500
     #def update(self):
-
-
+                
     # Procedure for what happens when the right and left arrow key is pressed
     def moveRight(self, speed):
         self.rect.x += speed
@@ -111,15 +110,14 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
     keys = pygame.key.get_pressed()
-    if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
-        if keys[pygame.K_LEFT]:
-            myPlayer.moveLeft(20)
-        if keys[pygame.K_RIGHT]:
-            myPlayer.moveRight(20)
-        if keys[pygame.K_UP]:
-            myPlayer.moveUp(20)
-        if keys[pygame.K_DOWN]:
-            myPlayer.moveDown(20)
+    if keys[pygame.K_LEFT]:
+        myPlayer.moveLeft(20)
+    if keys[pygame.K_RIGHT]:
+        myPlayer.moveRight(20)
+    if keys[pygame.K_UP]:
+        myPlayer.moveUp(20)
+    if keys[pygame.K_DOWN]:
+        myPlayer.moveDown(20)
  
     # Game logic should go here
     all_sprites_group.update()
