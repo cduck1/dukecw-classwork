@@ -22,7 +22,9 @@ done = False
 # CREATE GROUPS
 # Create groups for each sprite
 player_group = pygame.sprite.Group()
-wall_group = pygame.sprite.Group()
+allwall_group = pygame.sprite.Group()
+outerwall_group = pygame.sprite.Group()
+innerwall_group = pygame.sprite.Group()
 # Create a group of all sprites together
 all_sprites_group = pygame.sprite.Group()
 
@@ -57,7 +59,7 @@ class player(pygame.sprite.Sprite):
         # Move the player left/right
         self.rect.x += self.change_x
         # Check to see if this update causes us to hit a wall
-        wall_hit_group = pygame.sprite.spritecollide(self, wall_group, False)
+        wall_hit_group = pygame.sprite.spritecollide(self, allwall_group, False)
         for wall in wall_hit_group:
             # If we are moving right, set our right side to the left side of the wall we hit
             if self.change_x > 0:
@@ -69,7 +71,7 @@ class player(pygame.sprite.Sprite):
         # Move the player up/down
         self.rect.y += self.change_y
         # Check and see if we hit anything
-        wall_hit_group = pygame.sprite.spritecollide(self, wall_group, False)
+        wall_hit_group = pygame.sprite.spritecollide(self, allwall_group, False)
         for wall in wall_hit_group:
             # Reset our position based on the top/bottom of the object.
             if self.change_y > 0:
@@ -92,6 +94,9 @@ class wall(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+class innerwall(wall):
+    pass
 
 # INSTANTATION CODE
 # Instantiate the player class - colour, width, height, x, y, speed
@@ -120,7 +125,7 @@ wall_present = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -149,8 +154,15 @@ for i in range (0,625):
         
     if wall_present[i] == 1:
         myWall = wall(RED, 40, 40, temp_x, temp_y)
-        wall_group.add(myWall)
+        outerwall_group.add(myWall)
+        allwall_group.add(myWall)
         all_sprites_group.add(myWall)
+    # 2s in the array represent inner walls
+    if wall_present[i] == 2:
+        myInnerWall = innerwall(RED, 40, 40, temp_x, temp_y)
+        innerwall_group.add(myInnerWall)
+        allwall_group.add(myInnerWall)
+        all_sprites_group.add(myInnerWall)
 
 
 # MAIN PROGRAM LOOP
@@ -161,13 +173,13 @@ while not done:
             done = True
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        myPlayer.changespeed(-20, 0)
+        myPlayer.changespeed(-10, 0)
     if keys[pygame.K_RIGHT]:
-        myPlayer.changespeed(20, 0)
+        myPlayer.changespeed(10, 0)
     if keys[pygame.K_UP]:
-        myPlayer.changespeed(0, -20)
+        myPlayer.changespeed(0, -10)
     if keys[pygame.K_DOWN]:
-        myPlayer.changespeed(0, 20)
+        myPlayer.changespeed(0, 10)
  
     # Game logic should go here
     all_sprites_group.update()
