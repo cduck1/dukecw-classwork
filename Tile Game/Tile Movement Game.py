@@ -84,7 +84,7 @@ class player(pygame.sprite.Sprite):
         self.change_y = 0
 
 # Making the wall class
-class wall(pygame.sprite.Sprite):
+class outerwall(pygame.sprite.Sprite):
     # Define the constructor for the wall class
     def __init__(self, color, width, height, x, y):
         super().__init__()
@@ -95,7 +95,7 @@ class wall(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-class innerwall(wall):
+class innerwall(outerwall):
     pass
 
 # INSTANTATION CODE
@@ -153,10 +153,10 @@ for i in range (0,625):
         temp_y = temp_y + 40
         
     if wall_present[i] == 1:
-        myWall = wall(RED, 40, 40, temp_x, temp_y)
-        outerwall_group.add(myWall)
-        allwall_group.add(myWall)
-        all_sprites_group.add(myWall)
+        myOuterWall = outerwall(RED, 40, 40, temp_x, temp_y)
+        outerwall_group.add(myOuterWall)
+        allwall_group.add(myOuterWall)
+        all_sprites_group.add(myOuterWall)
     # 2s in the array represent inner walls
     if wall_present[i] == 2:
         myInnerWall = innerwall(RED, 40, 40, temp_x, temp_y)
