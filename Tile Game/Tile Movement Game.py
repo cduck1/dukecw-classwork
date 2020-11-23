@@ -57,15 +57,14 @@ class player(pygame.sprite.Sprite):
 
         # Move left/right
         self.rect.x += self.change_x
-        # Did this update cause us to hit a wall?
+        # Check to see if this update causes us to hit a wall
         wall_hit_group = pygame.sprite.spritecollide(self, wall_group, False)
         for wall in wall_hit_group:
-            # If we are moving right, set our right side to the left side of
-            # the item we hit
+            # If we are moving right, set our right side to the left side of the wall we hit
             if self.change_x > 0:
                 self.rect.right = wall.rect.left
             else:
-                # Otherwise if we are moving left, do the opposite.
+                # Otherwise if we are moving left, do the opposite
                 self.rect.left = wall.rect.right
  
         # Move up/down
