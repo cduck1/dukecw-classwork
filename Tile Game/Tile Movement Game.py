@@ -60,12 +60,12 @@ class player(pygame.sprite.Sprite):
         if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
             self.rect.y -= y_speed
         else:
-            self.rect.y += 20
+            self.rect.y += y_speed
     def moveDown(self, y_speed):
         if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
             self.rect.y += y_speed
         else:
-            self.rect.y -= 20
+            self.rect.y -= y_speed
 
 # Making the wall class
 class wall(pygame.sprite.Sprite):
