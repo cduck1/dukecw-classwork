@@ -43,19 +43,18 @@ class player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 500
         self.rect.y = 500
-        # Set speed vector
+        # Set a speed vector
         self.change_x = 0
         self.change_y = 0
  
+    # Change the x and y speed of the player
     def changespeed(self, x, y):
-        # Change the speed of the player
         self.change_x += x
         self.change_y += y
  
+    # This update function moves the player and checks whether the player has collidesd with a wall - if it does it stops
     def update(self):
-        # Update the player position
-
-        # Move left/right
+        # Move the player left/right
         self.rect.x += self.change_x
         # Check to see if this update causes us to hit a wall
         wall_hit_group = pygame.sprite.spritecollide(self, wall_group, False)
@@ -67,7 +66,7 @@ class player(pygame.sprite.Sprite):
                 # Otherwise if we are moving left, do the opposite
                 self.rect.left = wall.rect.right
  
-        # Move up/down
+        # Move the player up/down
         self.rect.y += self.change_y
         # Check and see if we hit anything
         wall_hit_group = pygame.sprite.spritecollide(self, wall_group, False)
@@ -78,19 +77,9 @@ class player(pygame.sprite.Sprite):
             else:
                 self.rect.top = wall.rect.bottom
         
-        # Resets the change to 0 every update so that the speed doesn't accelerate infinitely
+        # Resets the speed change to 0 every update so that the speed doesn't accelerate infinitely
         self.change_x = 0
         self.change_y = 0
-
-    # Procedure for what happens when the right and left arrow key is pressed
-    def moveRight(self, x_speed):
-        self.rect.x += x_speed
-    def moveLeft(self, x_speed):
-        self.rect.x -= x_speed
-    def moveUp(self, y_speed):
-        self.rect.y -= y_speed
-    def moveDown(self, y_speed):
-            self.rect.y += y_speed
 
 # Making the wall class
 class wall(pygame.sprite.Sprite):
