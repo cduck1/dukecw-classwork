@@ -33,7 +33,7 @@ clock = pygame.time.Clock()
 # Making the player class
 class player(pygame.sprite.Sprite):
     # Define the constructor for the player
-    def __init__(self, color, width, height):
+    def __init__(self, color, width, height, x_speed, y_speed):
         # Call the super class (the super class for the player is sprite)
         super().__init__()
         # Create a sprite and fill it with a colour
@@ -44,16 +44,28 @@ class player(pygame.sprite.Sprite):
         self.rect.x = 500
         self.rect.y = 500
     #def update(self):
-                
+
     # Procedure for what happens when the right and left arrow key is pressed
-    def moveRight(self, speed):
-        self.rect.x += speed
-    def moveLeft(self, speed):
-        self.rect.x -= speed
-    def moveUp(self, speed):
-        self.rect.y -= speed
-    def moveDown(self, speed):
-        self.rect.y += speed
+    def moveRight(self, x_speed):
+        if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
+            self.rect.x += x_speed
+        else:
+            self.rect.x -= x_speed
+    def moveLeft(self, x_speed):
+        if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
+            self.rect.x -= x_speed
+        else:
+            self.rect.x += x_speed
+    def moveUp(self, y_speed):
+        if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
+            self.rect.y -= y_speed
+        else:
+            self.rect.y += 20
+    def moveDown(self, y_speed):
+        if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
+            self.rect.y += y_speed
+        else:
+            self.rect.y -= 20
 
 # Making the wall class
 class wall(pygame.sprite.Sprite):
@@ -69,7 +81,7 @@ class wall(pygame.sprite.Sprite):
 
 # INSTANTATION CODE
 # Instantiate the player class - colour, width, height, x, y, speed
-myPlayer = player(BLUE, 40, 40)
+myPlayer = player(BLUE, 40, 40, 20, 20)
 # Add the player to a player group and an all sprites group
 player_group.add(myPlayer)
 all_sprites_group.add(myPlayer)
