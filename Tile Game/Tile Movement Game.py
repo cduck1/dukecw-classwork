@@ -43,29 +43,55 @@ class player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 500
         self.rect.y = 500
-    #def update(self):
+        # Set speed vector
+        self.change_x = 0
+        self.change_y = 0
+ 
+    def changespeed(self, x, y):
+        # Change the speed of the player
+        self.change_x += x
+        self.change_y += y
+ 
+    def update(self):
+        # Update the player position
+
+        # Move left/right
+        self.rect.x += self.change_x
+        # Did this update cause us to hit a wall?
+        wall_hit_group = pygame.sprite.spritecollide(self, wall_group, False)
+        for wall in wall_hit_group:
+            # If we are moving right, set our right side to the left side of
+            # the item we hit
+            if self.change_x > 0:
+                self.rect.right = wall.rect.left
+            else:
+                # Otherwise if we are moving left, do the opposite.
+                self.rect.left = wall.rect.right
+ 
+        # Move up/down
+        self.rect.y += self.change_y
+        # Check and see if we hit anything
+        wall_hit_group = pygame.sprite.spritecollide(self, wall_group, False)
+        for wall in wall_hit_group:
+            # Reset our position based on the top/bottom of the object.
+            if self.change_y > 0:
+                self.rect.bottom = wall.rect.top
+            else:
+                self.rect.top = wall.rect.bottom
+        
+        # Resets the change to 0 every update so that the speed doesn't accelerate infinitely
+        self.change_x = 0
+        self.change_y = 0
 
     # Procedure for what happens when the right and left arrow key is pressed
     def moveRight(self, x_speed):
-        if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
-            self.rect.x += x_speed
-        else:
-            self.rect.x -= x_speed
+        self.rect.x += x_speed
     def moveLeft(self, x_speed):
-        if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
-            self.rect.x -= x_speed
-        else:
-            self.rect.x += x_speed
+        self.rect.x -= x_speed
     def moveUp(self, y_speed):
-        if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
-            self.rect.y -= y_speed
-        else:
-            self.rect.y += y_speed
+        self.rect.y -= y_speed
     def moveDown(self, y_speed):
-        if not(pygame.sprite.spritecollide(myPlayer,wall_group,False)):
             self.rect.y += y_speed
-        else:
-            self.rect.y -= y_speed
 
 # Making the wall class
 class wall(pygame.sprite.Sprite):
@@ -123,13 +149,13 @@ while not done:
             done = True
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        myPlayer.moveLeft(20)
+        myPlayer.changespeed(-20, 0)
     if keys[pygame.K_RIGHT]:
-        myPlayer.moveRight(20)
+        myPlayer.changespeed(20, 0)
     if keys[pygame.K_UP]:
-        myPlayer.moveUp(20)
+        myPlayer.changespeed(0, -20)
     if keys[pygame.K_DOWN]:
-        myPlayer.moveDown(20)
+        myPlayer.changespeed(0, 20)
  
     # Game logic should go here
     all_sprites_group.update()
