@@ -141,7 +141,7 @@ class enemy(pygame.sprite.Sprite):
     # Interactions between the player and the enemy
     def update(self):
         enemy_hit_group = pygame.sprite.spritecollide(myPlayer, enemy_group, False)
-        for self in enemy_hit_group:
+        for myEnemy in enemy_hit_group:
             for event in pygame.event.get(): # Using this type of key pressing because we don't want the player to be able to hold the key down
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
@@ -151,12 +151,13 @@ class enemy(pygame.sprite.Sprite):
         # If the enemy's health is 0, delete it
         if self.health == 0:
             myEnemy.kill()
+
 # INSTANTATION CODE
 
 
-# CREATING THE WALLS USING A LIST 
+# CREATING THE LAYOUT OF THE GAME USING A LIST 
 # Plan for creating the walls: have a list of 625 items, create wall at a specific x and y coordinates if there is a 1; once you get to the 25th element (to the end of the screen), go you down 40 pixels and start at x coord 0
-# Rows are sets of 25 elements
+# Rows are sets of 30 elements
 # There are 750 total elements because each element represent a block of 40 by 40 and 25 x 30 = 750
 # Top and bottom walls (30 1s) = 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
 # Side walls = 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
