@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # Defining Colours
 BLACK = (0,0,0)
@@ -22,9 +23,10 @@ done = False
 # CREATE GROUPS
 # Create groups for each sprite
 player_group = pygame.sprite.Group()
-allwall_group = pygame.sprite.Group()
+allwall_group = pygame.sprite.Group()   # All wall group is a group including all inner and outer walls
 outerwall_group = pygame.sprite.Group()
 innerwall_group = pygame.sprite.Group()
+enemy_group = pygame.sprite.Group()
 # Create a group of all sprites together
 all_sprites_group = pygame.sprite.Group()
 
@@ -49,7 +51,7 @@ class player(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
         # Variables
-        self.health = 100
+        self.health = 300
         self.money = 0
         self.keys = 0
  
@@ -58,7 +60,7 @@ class player(pygame.sprite.Sprite):
         self.change_x += x
         self.change_y += y
  
-    # This update function moves the player and checks whether the player has collidesd with a wall - if it does it stops
+    # This update function moves the player and checks whether the player has collided with a wall - if it does it stops
     def update(self):
         # Move the player left/right
         self.rect.x += self.change_x
@@ -71,7 +73,16 @@ class player(pygame.sprite.Sprite):
             else:
                 # Otherwise if we are moving left, do the opposite
                 self.rect.left = wall.rect.right
- 
+
+        enemy_hit_group = pygame.sprite.spritecollide(self, enemy_group, False)
+        for enemy in enemy_hit_group:
+            # If we are moving right, set our right side to the left side of the enemy we hit
+            if self.change_x > 0:
+                self.rect.right = enemy.rect.left
+            else:
+                # Otherwise if we are moving left, do the opposite
+                self.rect.left = enemy.rect.right
+
         # Move the player up/down
         self.rect.y += self.change_y
         # Check and see if we hit anything
@@ -82,7 +93,16 @@ class player(pygame.sprite.Sprite):
                 self.rect.bottom = wall.rect.top
             else:
                 self.rect.top = wall.rect.bottom
-        
+
+        # Check for collisions between the player and the enemies
+        enemy_hit_group = pygame.sprite.spritecollide(self, enemy_group, False)
+        for enemy in enemy_hit_group:
+            # Reset our position based on the top/bottom of the object.
+            if self.change_y > 0:
+                self.rect.bottom = enemy.rect.top
+            else:
+                self.rect.top = enemy.rect.bottom
+
         # Resets the speed change to 0 every update so that the speed doesn't accelerate infinitely
         self.change_x = 0
         self.change_y = 0
@@ -102,6 +122,35 @@ class outerwall(pygame.sprite.Sprite):
 class innerwall(outerwall):
     pass
 
+# Making the enemy class
+class enemy(pygame.sprite.Sprite):
+    # Define the constructor for the enemy
+    def __init__(self, color, width, height, x_speed, y_speed, x, y):
+        # Call the super class (the super class for the player is sprite)
+        super().__init__()
+        # Create a sprite and fill it with a colour
+        self.image = pygame.Surface([width,height])
+        self.image.fill(color)
+        # Set the position of the sprite
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        # Variables
+        self.health = 100
+
+    # Interactions between the player and the enemy
+    def update(self):
+        enemy_hit_group = pygame.sprite.spritecollide(myPlayer, enemy_group, False)
+        for self in enemy_hit_group:
+            for event in pygame.event.get(): # Using this type of key pressing because we don't want the player to be able to hold the key down
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                            self.health -= random.randint(20,60) # Makes the player do a random amount of damage between 20 and 60 - the damage done is minused off the enemy's health
+                            print(self.health)
+
+        # If the enemy's health is 0, delete it
+        if self.health == 0:
+            myEnemy.kill()
 # INSTANTATION CODE
 
 
@@ -109,14 +158,19 @@ class innerwall(outerwall):
 # Plan for creating the walls: have a list of 625 items, create wall at a specific x and y coordinates if there is a 1; once you get to the 25th element (to the end of the screen), go you down 40 pixels and start at x coord 0
 # Rows are sets of 25 elements
 # There are 750 total elements because each element represent a block of 40 by 40 and 25 x 30 = 750
-# Top and bottom walls (25 1s) = 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-# Side walls = 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+# Top and bottom walls (30 1s) = 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+# Side walls = 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+# 0 = nothing present
+# 1 = outer wall present
+# 2 = inner wall present
+# 3 = player start point
+# 4 = enemy start point
 wall_present = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -133,9 +187,10 @@ wall_present = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+
 for i in range (0,750):
     # temp_x and temp_y are the temporary values where the wall will be created for that iteration of the for loop, so if there is a 1 at that position, it will be created at a different x and y each time
     # We have an if i == 0 here because we need the walls to start at zero, if it didnt we would start with temp_x = temp_x + 40 and so fourth
@@ -151,7 +206,7 @@ for i in range (0,750):
     elif i % 30 == 0:
         temp_x = 0
         temp_y = temp_y + 40
-        
+    # 1s in the array represent outer walls
     if wall_present[i] == 1:
         myOuterWall = outerwall(RED, 40, 40, temp_x, temp_y)
         outerwall_group.add(myOuterWall)
@@ -163,12 +218,18 @@ for i in range (0,750):
         innerwall_group.add(myInnerWall)
         allwall_group.add(myInnerWall)
         all_sprites_group.add(myInnerWall)
+    # 3s in the array represent the starting position of the player
     if wall_present[i] == 3:
         # Instantiate the player class - colour, width, height, x, y, speed
         myPlayer = player(BLUE, 40, 40, 20, 20, temp_x, temp_y)
         # Add the player to a player group and an all sprites group
         player_group.add(myPlayer)
         all_sprites_group.add(myPlayer)
+    # 4s in the array represent the starting positions on the enemies
+    if wall_present[i] == 4:
+        myEnemy = enemy(YELLOW, 40, 40, 20, 20, temp_x, temp_y)
+        enemy_group.add(myEnemy)
+        all_sprites_group.add(myEnemy)
 
 
 # MAIN PROGRAM LOOP
@@ -186,7 +247,7 @@ while not done:
         myPlayer.changespeed(0, -10)
     if keys[pygame.K_DOWN]:
         myPlayer.changespeed(0, 10)
- 
+
     # Game logic should go here
     all_sprites_group.update()
 
