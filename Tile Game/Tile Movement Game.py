@@ -113,7 +113,6 @@ class innerwall(outerwall):
 # Side walls = 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
 wall_present = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -123,6 +122,7 @@ wall_present = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -204,17 +204,17 @@ while not done:
     all_sprites_group.draw(screen)
 
     # Draw player attributes - health, money, keys
-    font = pygame.font.Font('freesansbold.ttf', 10)
+    font = pygame.font.Font('freesansbold.ttf', 17)
     text = font.render(("HEALTH: " + str(myPlayer.health)), 1, WHITE)
-    screen.blit(text, (10, 15))
+    screen.blit(text, (5, 5))
 
-    font = pygame.font.Font('freesansbold.ttf', 10)
+    font = pygame.font.Font('freesansbold.ttf', 17)
     text = font.render(("MONEY: " + str(myPlayer.money)), 1, WHITE)
-    screen.blit(text, (10, 25))
+    screen.blit(text, (5, 20))
 
-    font = pygame.font.Font('freesansbold.ttf', 10)
+    font = pygame.font.Font('freesansbold.ttf', 17)
     text = font.render(("KEYS: " + str(myPlayer.keys)), 1, WHITE)
-    screen.blit(text, (10, 35))
+    screen.blit(text, (5, 35))
 
     # Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
