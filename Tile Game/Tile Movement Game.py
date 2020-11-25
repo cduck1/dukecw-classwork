@@ -107,6 +107,21 @@ class player(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
 
+        # PLAYER - ENEMY INTERACTIONS
+        # Make it so that the player must be within a certain radius of the enemy, if the player presses space while within that radius, health is minused from the enemy
+        
+        enemy_hit_group = pygame.sprite.spritecollide(self, enemy_group, False)
+        for enemy in enemy_hit_group:
+            enemy.vulnerable = True
+
+        keys = pygame.key.set_repeat(1)
+        if myEnemy.vulnerable == True and keys[pygame.K_SPACE]:
+            myEnemy.health -= random.randint(20,60) # Makes the player do a random amount of damage between 20 and 60 - the damage done is minused off the enemy's health
+            print(self.health)
+        
+        if myEnemy.health == 0:
+            myEnemy.kill()
+
 # Making the wall class
 class outerwall(pygame.sprite.Sprite):
     # Define the constructor for the wall class
@@ -137,20 +152,10 @@ class enemy(pygame.sprite.Sprite):
         self.rect.y = y
         # Variables
         self.health = 100
+        self.vulnerable = False # If the player can do damage to the enemy
 
-    # Interactions between the player and the enemy
-    def update(self):
-        enemy_hit_group = pygame.sprite.spritecollide(myPlayer, enemy_group, False)
-        for myEnemy in enemy_hit_group:
-            for event in pygame.event.get(): # Using this type of key pressing because we don't want the player to be able to hold the key down
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                            self.health -= random.randint(20,60) # Makes the player do a random amount of damage between 20 and 60 - the damage done is minused off the enemy's health
-                            print(self.health)
+    # def update(self):
 
-        # If the enemy's health is 0, delete it
-        if self.health == 0:
-            myEnemy.kill()
 
 # INSTANTATION CODE
 
