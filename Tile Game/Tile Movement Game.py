@@ -64,7 +64,7 @@ class player(pygame.sprite.Sprite):
     def update(self):
         # Move the player left/right
         self.rect.x += self.change_x
-        # Check to see if this update causes us to hit a wall
+        # Did we HIT A WALL while moving left/right
         wall_hit_group = pygame.sprite.spritecollide(self, allwall_group, False)
         for wall in wall_hit_group:
             # If we are moving right, set our right side to the left side of the wall we hit
@@ -74,6 +74,7 @@ class player(pygame.sprite.Sprite):
                 # Otherwise if we are moving left, do the opposite
                 self.rect.left = wall.rect.right
 
+        # Did we HIT AN ENEMY while moving left/right 
         enemy_hit_group = pygame.sprite.spritecollide(self, enemy_group, False)
         for enemy in enemy_hit_group:
             # If we are moving right, set our right side to the left side of the enemy we hit
@@ -85,7 +86,7 @@ class player(pygame.sprite.Sprite):
 
         # Move the player up/down
         self.rect.y += self.change_y
-        # Check and see if we hit anything
+        # Did we hit a WALL while moving up/down
         wall_hit_group = pygame.sprite.spritecollide(self, allwall_group, False)
         for wall in wall_hit_group:
             # Reset our position based on the top/bottom of the object.
@@ -94,7 +95,7 @@ class player(pygame.sprite.Sprite):
             else:
                 self.rect.top = wall.rect.bottom
 
-        # Check for collisions between the player and the enemies
+        # Did we HIT AN ENEMY while moving up/down
         enemy_hit_group = pygame.sprite.spritecollide(self, enemy_group, False)
         for enemy in enemy_hit_group:
             # Reset our position based on the top/bottom of the object.
@@ -107,20 +108,18 @@ class player(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
 
-        # PLAYER - ENEMY INTERACTIONS
-        # Make it so that the player must be within a certain radius of the enemy, if the player presses space while within that radius, health is minused from the enemy
-        
-        enemy_hit_group = pygame.sprite.spritecollide(self, enemy_group, False)
-        for enemy in enemy_hit_group:
-            enemy.vulnerable = True
+    # Instantating the sword
+    def spawnsword(self):
+        # If the player is moving up, the sword is spawned on top of the enemy
+        if self.change_x > 0: # If the player is moving right
+            mySword = sword(RED, 4, 10, self.rect.x + 40, self.rect.y + 18)
+        else: # If the player is moving left
+            mySword = sword(RED, 4, 10, self.rect.x, self.rect.y + 18)
+        if self.change_y > 0: # If the player is moving down
+            mySword = sword(RED, 4, 10, self.rect.x + 18, self.rect.y)
+        else: # If the player is moving up
+            mySword = sword(RED, 4, 10, self.rect.x + 18, self.rect.y + 40)
 
-        keys = pygame.key.set_repeat(1)
-        if myEnemy.vulnerable == True and keys[pygame.K_SPACE]:
-            myEnemy.health -= random.randint(20,60) # Makes the player do a random amount of damage between 20 and 60 - the damage done is minused off the enemy's health
-            print(self.health)
-        
-        if myEnemy.health == 0:
-            myEnemy.kill()
 
 # Making the wall class
 class outerwall(pygame.sprite.Sprite):
@@ -152,10 +151,20 @@ class enemy(pygame.sprite.Sprite):
         self.rect.y = y
         # Variables
         self.health = 100
-        self.vulnerable = False # If the player can do damage to the enemy
 
-    # def update(self):
-
+# Making the sword class
+class sword(pygame.sprite.Sprite):
+    # Define the constructor for the enemy
+    def __init__(self, color, width, height, x, y):
+        # Call the super class (the super class for the player is sprite)
+        super().__init__()
+        # Create a sprite and fill it with a colour
+        self.image = pygame.Surface([width,height])
+        self.image.fill(color)
+        # Set the position of the sprite
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
 # INSTANTATION CODE
 
@@ -253,7 +262,8 @@ while not done:
         myPlayer.changespeed(0, -10)
     if keys[pygame.K_DOWN]:
         myPlayer.changespeed(0, 10)
-
+    if keys[pygame.K_SPACE]:
+        myPlayer.spawnsword()
     # Game logic should go here
     all_sprites_group.update()
 
