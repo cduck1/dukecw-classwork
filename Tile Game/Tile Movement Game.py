@@ -8,6 +8,7 @@ GREEN = (0,255,0)
 RED = (255,0,0)
 BLUE = (0,0,255)
 YELLOW = (255,255,0)
+PINK = (255,20,147)
 
 pygame.init()
 
@@ -28,6 +29,7 @@ outerwall_group = pygame.sprite.Group()
 innerwall_group = pygame.sprite.Group()
 enemy_group = pygame.sprite.Group()
 sword_group = pygame.sprite.Group()
+key_group = pygame.sprite.Group()
 # Create a group of all sprites together
 all_sprites_group = pygame.sprite.Group()
 
@@ -150,6 +152,24 @@ class enemy(pygame.sprite.Sprite):
         # Variables
         self.health = 100
 
+    def update(self):
+        # If the sword and the enemy collide, minus health from the enemy
+        enemy_hit_group = pygame.sprite.groupcollide(enemy_group, sword_group, False, False)
+        for self in enemy_hit_group:
+            self.health -= random.randint(1,3) # Makes the sword do a random amount of damage between 1 and 3 (such low damage so that the enemy doesnt die instantly)- the damage done is minused off the enemy's health. Need to use a data hiding method here (do self.health -= mySword.damage) but there is no mySword as it is a local variable - need a fix
+            if self.health > 0:
+                print("Enemy Health: " + str(self.health))
+            else:
+                print("Enemy is dead")
+            
+            # Remove the enemy from the screen when it's health = 0 or less
+            # When the enemy dies, spawn a key on its position
+            if self.health < 1:
+                myKey = key(PINK, 20, 20, self.rect.x + 10, self.rect.y + 10)
+                key_group.add(myKey)
+                all_sprites_group.add(myKey)
+                self.kill()
+
 # Making the sword class
 class sword(pygame.sprite.Sprite):
     # Define the constructor for the enemy
@@ -165,6 +185,7 @@ class sword(pygame.sprite.Sprite):
         self.rect.y = y
         # Variables
         self.swordavaliable = True
+        self.damage = random.randint(20,50) # Makes the sword do a random amount of damage between 20 and 60 - the damage done is minused off the enemy's health - doesnt work because myEnemy doesn't exist
 
     def update(self):
         # While SPACE is being held down, keep the sword in the same position (attached to the right side of the player). If space is not being held down, delete the sword
@@ -174,6 +195,41 @@ class sword(pygame.sprite.Sprite):
             self.rect.y = myPlayer.rect.y + 18
         else:
             self.kill()
+
+# Making the keys class
+class key(pygame.sprite.Sprite):
+    # Define the constructor for the enemy
+    def __init__(self, color, width, height, x, y):
+        # Call the super class (the super class for the player is sprite)
+        super().__init__()
+        # Create a sprite and fill it with a colour
+        self.image = pygame.Surface([width,height])
+        self.image.fill(color)
+        # Set the position of the sprite
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def update(self):
+        # If the player and the key collides, add 1 key to myPlayer.keys
+        if pygame.sprite.groupcollide(key_group, player_group, True, False):
+            myPlayer.keys += 1
+
+# Making a portal class - takes the player to the next level
+class portal(pygame.sprite.Sprite):
+    # Define the constructor for the enemy
+    def __init__(self, color, width, height, x, y):
+        # Call the super class (the super class for the player is sprite)
+        super().__init__()
+        # Create a sprite and fill it with a colour
+        self.image = pygame.Surface([width,height])
+        self.image.fill(color)
+        # Set the position of the sprite
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
 
 # INSTANTATION CODE
 
@@ -195,18 +251,18 @@ wall_present = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,2,2,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,3,0,2,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,2,2,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,2,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,2,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,2,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
                 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
