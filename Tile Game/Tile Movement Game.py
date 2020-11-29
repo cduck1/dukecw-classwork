@@ -166,9 +166,14 @@ class sword(pygame.sprite.Sprite):
         # Variables
         self.swordavaliable = True
 
-    #def update(self):
-        # While SPACE is being held down, keep the sword in the same position
-
+    def update(self):
+        # While SPACE is being held down, keep the sword in the same position (attached to the right side of the player). If space is not being held down, delete the sword
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            self.rect.x = myPlayer.rect.x + 40
+            self.rect.y = myPlayer.rect.y + 18
+        else:
+            
 
 # INSTANTATION CODE
 
