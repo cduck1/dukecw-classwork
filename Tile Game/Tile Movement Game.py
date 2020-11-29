@@ -173,7 +173,7 @@ class sword(pygame.sprite.Sprite):
             self.rect.x = myPlayer.rect.x + 40
             self.rect.y = myPlayer.rect.y + 18
         else:
-            
+            self.kill()
 
 # INSTANTATION CODE
 
