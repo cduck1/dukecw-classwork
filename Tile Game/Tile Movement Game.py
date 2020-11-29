@@ -27,6 +27,7 @@ allwall_group = pygame.sprite.Group()   # All wall group is a group including al
 outerwall_group = pygame.sprite.Group()
 innerwall_group = pygame.sprite.Group()
 enemy_group = pygame.sprite.Group()
+sword_group = pygame.sprite.Group()
 # Create a group of all sprites together
 all_sprites_group = pygame.sprite.Group()
 
@@ -113,12 +114,20 @@ class player(pygame.sprite.Sprite):
         # If the player is moving up, the sword is spawned on top of the enemy
         if self.change_x > 0: # If the player is moving right
             mySword = sword(RED, 4, 10, self.rect.x + 40, self.rect.y + 18)
-        else: # If the player is moving left
+            sword_group.add(mySword)
+            all_sprites_group.add(mySword)
+        if self.change_x < 0: # If the player is moving left
             mySword = sword(RED, 4, 10, self.rect.x, self.rect.y + 18)
+            sword_group.add(mySword)
+            all_sprites_group.add(mySword)
         if self.change_y > 0: # If the player is moving down
             mySword = sword(RED, 4, 10, self.rect.x + 18, self.rect.y)
-        else: # If the player is moving up
+            sword_group.add(mySword)
+            all_sprites_group.add(mySword)
+        if self.change_y < 0: # If the player is moving up
             mySword = sword(RED, 4, 10, self.rect.x + 18, self.rect.y + 40)
+            sword_group.add(mySword)
+            all_sprites_group.add(mySword)
 
 
 # Making the wall class
@@ -165,6 +174,7 @@ class sword(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+    def update(self):
 
 # INSTANTATION CODE
 
