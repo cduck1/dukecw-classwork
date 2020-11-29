@@ -111,23 +111,12 @@ class player(pygame.sprite.Sprite):
 
     # Instantating the sword
     def spawnsword(self):
-        # If the player is moving up, the sword is spawned on top of the enemy
-        if self.change_x > 0: # If the player is moving right
-            mySword = sword(RED, 4, 10, self.rect.x + 40, self.rect.y + 18)
+        # The sword is spawned on the right side of the player
+        if sword.swordavaliable == True:
+            mySword = sword(RED, 10, 4, self.rect.x + 40, self.rect.y + 18)
             sword_group.add(mySword)
             all_sprites_group.add(mySword)
-        if self.change_x < 0: # If the player is moving left
-            mySword = sword(RED, 4, 10, self.rect.x, self.rect.y + 18)
-            sword_group.add(mySword)
-            all_sprites_group.add(mySword)
-        if self.change_y > 0: # If the player is moving down
-            mySword = sword(RED, 4, 10, self.rect.x + 18, self.rect.y)
-            sword_group.add(mySword)
-            all_sprites_group.add(mySword)
-        if self.change_y < 0: # If the player is moving up
-            mySword = sword(RED, 4, 10, self.rect.x + 18, self.rect.y + 40)
-            sword_group.add(mySword)
-            all_sprites_group.add(mySword)
+            sword.swordavaliable = False
 
 
 # Making the wall class
@@ -174,7 +163,12 @@ class sword(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-    def update(self):
+        # Variables
+        self.swordavaliable = True
+
+    #def update(self):
+        # While SPACE is being held down, keep the sword in the same position
+
 
 # INSTANTATION CODE
 
@@ -274,6 +268,10 @@ while not done:
         myPlayer.changespeed(0, 10)
     if keys[pygame.K_SPACE]:
         myPlayer.spawnsword()
+    else:
+        sword.swordavaliable = True # A new sword can only be made while the player isn't holding down SPACE - otherwise infinite swords are created but they are all on top of each other
+
+
     # Game logic should go here
     all_sprites_group.update()
 
