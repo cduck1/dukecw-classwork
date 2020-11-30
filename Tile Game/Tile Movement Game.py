@@ -330,13 +330,13 @@ while not done:
             done = True
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
-        myPlayer.changespeed(-10, 0)
+        myPlayer.changespeed(-7, 0)
     if keys[pygame.K_RIGHT]:
-        myPlayer.changespeed(10, 0)
+        myPlayer.changespeed(7, 0)
     if keys[pygame.K_UP]:
-        myPlayer.changespeed(0, -10)
+        myPlayer.changespeed(0, -7)
     if keys[pygame.K_DOWN]:
-        myPlayer.changespeed(0, 10)
+        myPlayer.changespeed(0, 7)
     if keys[pygame.K_SPACE]:
         myPlayer.spawnsword()
     else:
