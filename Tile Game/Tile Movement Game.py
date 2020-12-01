@@ -116,6 +116,7 @@ class player(pygame.sprite.Sprite):
         # Calls the makeportal() method when keys = 3
         if self.keys == 3:
             myPlayer.makeportal()
+            changelevel()
 
     # Instantating the sword
     def spawnsword(self):
@@ -240,6 +241,8 @@ class portal(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+def changelevel(temp_level):
+    temp_level = level[i+1]
 
 # INSTANTATION CODE
 
@@ -281,6 +284,38 @@ level1 =   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 
+level2 =   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+
+# Creating SEVERAL LEVEL
+levels = [level1, level2]
+
+# temp_level is the current level that the player is playing
+temp_level = levels[0]
+
 for i in range (0,750):
     # temp_x and temp_y are the temporary values where the wall will be created for that iteration of the for loop, so if there is a 1 at that position, it will be created at a different x and y each time
     # We have an if i == 0 here because we need the walls to start at zero, if it didnt we would start with temp_x = temp_x + 40 and so fourth
@@ -297,26 +332,26 @@ for i in range (0,750):
         temp_x = 0
         temp_y = temp_y + 40
     # 1s in the array represent outer walls
-    if level1[i] == 1:
+    if temp_level[i] == 1:
         myOuterWall = outerwall(RED, 40, 40, temp_x, temp_y)
         outerwall_group.add(myOuterWall)
         allwall_group.add(myOuterWall)
         all_sprites_group.add(myOuterWall)
     # 2s in the array represent inner walls
-    if level1[i] == 2:
+    if temp_level[i] == 2:
         myInnerWall = innerwall(RED, 40, 40, temp_x, temp_y)
         innerwall_group.add(myInnerWall)
         allwall_group.add(myInnerWall)
         all_sprites_group.add(myInnerWall)
     # 3s in the array represent the starting position of the player
-    if level1[i] == 3:
+    if temp_level[i] == 3:
         # Instantiate the player class - colour, width, height, x, y, speed
         myPlayer = player(BLUE, 40, 40, 20, 20, temp_x, temp_y)
         # Add the player to a player group and an all sprites group
         player_group.add(myPlayer)
         all_sprites_group.add(myPlayer)
     # 4s in the array represent the starting positions on the enemies
-    if level1[i] == 4:
+    if temp_level[i] == 4:
         myEnemy = enemy(YELLOW, 40, 40, 20, 20, temp_x, temp_y)
         enemy_group.add(myEnemy)
         all_sprites_group.add(myEnemy)
