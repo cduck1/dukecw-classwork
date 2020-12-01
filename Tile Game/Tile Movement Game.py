@@ -128,7 +128,7 @@ class player(pygame.sprite.Sprite):
 
     def makeportal(self):
         # Instantiates the portal
-        myPortal = portal(PURPLE, 120, 120, 540, 440) # A 3x3 block portal spawns in the middle of the screen
+        myPortal = portal(PURPLE, 200, 200, 480, 360) # A 3x3 block portal spawns in the middle of the screen
         portal_group.add(myPortal)
         all_sprites_group.add(myPortal)
 
