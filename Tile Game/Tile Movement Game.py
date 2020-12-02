@@ -116,7 +116,7 @@ class player(pygame.sprite.Sprite):
         # Calls the makeportal() method when keys = 3
         if self.keys == 3:
             myPlayer.makeportal()
-            changelevel()
+            
 
     # Instantating the sword
     def spawnsword(self):
@@ -240,9 +240,15 @@ class portal(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+    
+    # Call changelevel() when the player collides with the portal
+    def update(self):
+        if pygame.sprite.spritecollide(self, player_group, False):
+            changelevel(temp_level)
+            createlevel()
 
 def changelevel(temp_level):
-    temp_level = level[i+1]
+    temp_level = levels[currentlevel+1]
 
 # INSTANTATION CODE
 
@@ -313,49 +319,54 @@ level2 =   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 # Creating SEVERAL LEVEL
 levels = [level1, level2]
 
-# temp_level is the current level that the player is playing
-temp_level = levels[0]
+# temp_level is the current level that the player is playing, current level is a placeholder so that it levels[] can be incremented
+currentlevel = 0
+temp_level = levels[currentlevel]
 
-for i in range (0,750):
-    # temp_x and temp_y are the temporary values where the wall will be created for that iteration of the for loop, so if there is a 1 at that position, it will be created at a different x and y each time
-    # We have an if i == 0 here because we need the walls to start at zero, if it didnt we would start with temp_x = temp_x + 40 and so fourth
-    # Add 40 to the x coordinate for the wall when there is a y in the list
-    if i == 0:
-        temp_x = 0
-    else:
-        temp_x = temp_x + 40
-    
-    # Increases the y value (goes down to the next row of walls) once the row is filled (after 25 elements in the list), but dont change it when i = 0
-    if i == 0:
-        temp_y = 0
-    elif i % 30 == 0:
-        temp_x = 0
-        temp_y = temp_y + 40
-    # 1s in the array represent outer walls
-    if temp_level[i] == 1:
-        myOuterWall = outerwall(RED, 40, 40, temp_x, temp_y)
-        outerwall_group.add(myOuterWall)
-        allwall_group.add(myOuterWall)
-        all_sprites_group.add(myOuterWall)
-    # 2s in the array represent inner walls
-    if temp_level[i] == 2:
-        myInnerWall = innerwall(RED, 40, 40, temp_x, temp_y)
-        innerwall_group.add(myInnerWall)
-        allwall_group.add(myInnerWall)
-        all_sprites_group.add(myInnerWall)
-    # 3s in the array represent the starting position of the player
-    if temp_level[i] == 3:
-        # Instantiate the player class - colour, width, height, x, y, speed
-        myPlayer = player(BLUE, 40, 40, 20, 20, temp_x, temp_y)
-        # Add the player to a player group and an all sprites group
-        player_group.add(myPlayer)
-        all_sprites_group.add(myPlayer)
-    # 4s in the array represent the starting positions on the enemies
-    if temp_level[i] == 4:
-        myEnemy = enemy(YELLOW, 40, 40, 20, 20, temp_x, temp_y)
-        enemy_group.add(myEnemy)
-        all_sprites_group.add(myEnemy)
 
+def createmap():
+    for i in range (0,750):
+        # temp_x and temp_y are the temporary values where the wall will be created for that iteration of the for loop, so if there is a 1 at that position, it will be created at a different x and y each time
+        # We have an if i == 0 here because we need the walls to start at zero, if it didnt we would start with temp_x = temp_x + 40 and so fourth
+        # Add 40 to the x coordinate for the wall when there is a y in the list
+        if i == 0:
+            temp_x = 0
+        else:
+            temp_x = temp_x + 40
+        
+        # Increases the y value (goes down to the next row of walls) once the row is filled (after 25 elements in the list), but dont change it when i = 0
+        if i == 0:
+            temp_y = 0
+        elif i % 30 == 0:
+            temp_x = 0
+            temp_y = temp_y + 40
+        # 1s in the array represent outer walls
+        if temp_level[i] == 1:
+            myOuterWall = outerwall(RED, 40, 40, temp_x, temp_y)
+            outerwall_group.add(myOuterWall)
+            allwall_group.add(myOuterWall)
+            all_sprites_group.add(myOuterWall)
+        # 2s in the array represent inner walls
+        if temp_level[i] == 2:
+            myInnerWall = innerwall(RED, 40, 40, temp_x, temp_y)
+            innerwall_group.add(myInnerWall)
+            allwall_group.add(myInnerWall)
+            all_sprites_group.add(myInnerWall)
+        # 3s in the array represent the starting position of the player
+        if temp_level[i] == 3:
+            # Instantiate the player class - colour, width, height, x, y, speed
+            myPlayer = player(BLUE, 40, 40, 20, 20, temp_x, temp_y)
+            # Add the player to a player group and an all sprites group
+            player_group.add(myPlayer)
+            all_sprites_group.add(myPlayer)
+        # 4s in the array represent the starting positions on the enemies
+        if temp_level[i] == 4:
+            myEnemy = enemy(YELLOW, 40, 40, 20, 20, temp_x, temp_y)
+            enemy_group.add(myEnemy)
+            all_sprites_group.add(myEnemy)
+
+if currentlevel == 0:
+    createmap()
 
 # MAIN PROGRAM LOOP
 while not done:
