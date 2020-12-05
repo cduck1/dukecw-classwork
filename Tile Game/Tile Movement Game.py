@@ -113,8 +113,8 @@ class player(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
 
-        # Calls the makeportal() method when keys = 3
-        if self.keys == 3:
+        # Calls the makeportal() method when keys = 4
+        if self.keys == 4:
             # Instantiates the portal
             myPortal = portal(PURPLE, 200, 200, 480, 360) # A 3x3 block portal spawns in the middle of the screen
             portal_group.add(myPortal)
@@ -269,13 +269,10 @@ class portal(pygame.sprite.Sprite):
         self.rect.y = y
     
     # Call changelevel() when the player collides with the portal
-    #def update(self):
-        #if pygame.sprite.spritecollide(self, player_group, False):
-            
-
-#def changelevel(temp_level):
-#    temp_level = levels[currentlevel+1]
-
+    def update(self):
+        if pygame.sprite.spritecollide(self, player_group, False):
+            for i in range(0,4):
+                myEnemy = enemy(YELLOW, 40, 40, 20, 20, random.randint(0,440) or random.randint(620,1200), random.randint(0,320) or random.randint(500,1000))
 
 # INSTANTATION CODE
 
@@ -292,10 +289,10 @@ class portal(pygame.sprite.Sprite):
 # 4 = enemy start point
 level1 =   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,
+            1,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             1,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -312,42 +309,9 @@ level1 =   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,
+            1,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-
-level2 =   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-
-# Creating SEVERAL LEVEL
-levels = [level1, level2]
-
-# temp_level is the current level that the player is playing, current level is a placeholder so that it levels[] can be incremented
-currentlevel = 0
-temp_level = levels[currentlevel]
 
 
 for i in range (0,750):
@@ -366,26 +330,26 @@ for i in range (0,750):
         temp_x = 0
         temp_y = temp_y + 40
         # 1s in the array represent outer walls
-    if temp_level[i] == 1:
+    if level1 == 1:
         myOuterWall = outerwall(RED, 40, 40, temp_x, temp_y)
         outerwall_group.add(myOuterWall)
         allwall_group.add(myOuterWall)
         all_sprites_group.add(myOuterWall)
     # 2s in the array represent inner walls
-    if temp_level[i] == 2:
+    if level1 == 2:
         myInnerWall = innerwall(RED, 40, 40, temp_x, temp_y)
         innerwall_group.add(myInnerWall)
         allwall_group.add(myInnerWall)
         all_sprites_group.add(myInnerWall)
     # 3s in the array represent the starting position of the player
-    if temp_level[i] == 3:
+    if level1 == 3:
         # Instantiate the player class - colour, width, height, x, y, speed
         myPlayer = player(BLUE, 40, 40, 20, 20, temp_x, temp_y)
         # Add the player to a player group and an all sprites group
         player_group.add(myPlayer)
         all_sprites_group.add(myPlayer)
     # 4s in the array represent the starting positions on the enemies
-    if temp_level[i] == 4:
+    if level1 == 4:
         myEnemy = enemy(YELLOW, 40, 40, 20, 20, temp_x, temp_y)
         enemy_group.add(myEnemy)
         all_sprites_group.add(myEnemy)
