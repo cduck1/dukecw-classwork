@@ -273,11 +273,11 @@ class portal(pygame.sprite.Sprite):
         #if pygame.sprite.spritecollide(self, player_group, False):
             
 
-def changelevel(temp_level):
-    temp_level = levels[currentlevel+1]
+#def changelevel(temp_level):
+#    temp_level = levels[currentlevel+1]
+
 
 # INSTANTATION CODE
-
 
 # CREATING THE LAYOUT OF THE GAME USING A LIST 
 # Plan for creating the walls: have a list of 625 items, create wall at a specific x and y coordinates if there is a 1; once you get to the 25th element (to the end of the screen), go you down 40 pixels and start at x coord 0
