@@ -32,6 +32,9 @@ enemy_group = pygame.sprite.Group()
 sword_group = pygame.sprite.Group()
 key_group = pygame.sprite.Group()
 portal_group = pygame.sprite.Group()
+bullet_group = pygame.sprite.Group()
+bulletleft_group = pygame.sprite.Group()
+bulletright_group = pygame.sprite.Group()
 # Create a group of all sprites together
 all_sprites_group = pygame.sprite.Group()
 
@@ -113,14 +116,12 @@ class player(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
 
-        # Calls the makeportal() method when keys = 4
+        # Instatiates the portal when keys = 4
         if self.keys == 4:
-            # Instantiates the portal
             myPortal = portal(PURPLE, 200, 200, 480, 360) # A 3x3 block portal spawns in the middle of the screen
             portal_group.add(myPortal)
             all_sprites_group.add(myPortal)
             self.keys = 0
-            
 
     # Instantating the sword
     def spawnsword(self):
@@ -142,6 +143,23 @@ class outerwall(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+    def update(self):
+        # The outer walls shoot bullets and the player must dodge them
+        # Walls on the right shoot bullets from the right and vice virsa
+        for self in outerwall_group:
+            # If the wall is on the left side of the map, spawn a leftbullet that travels right
+            if self.rect.x == 0:
+                myBulletLeft = bullet(RED, 15, 15, self.rect.x + 40, self.rect.y + 20)
+                bulletleft_group.add(myBulletLeft)
+                bullet_group.add(myBulletLeft)
+                all_sprites_group.add(myBulletLeft)
+            # If the wall is on the right side of the map, spawn a rightbullet that travels left
+            if self.rect.x == 960:
+                myBulletRight = bullet(RED, 15, 15, self.rect.x - 60, self.rect.y + 20)
+                bulletright_group.add(myBulletRight)
+                bullet_group.add(myBulletRight)
+                all_sprites_group.add(myBulletRight)
+                
 
 class innerwall(outerwall):
     pass
@@ -166,7 +184,7 @@ class enemy(pygame.sprite.Sprite):
         # If the sword and the enemy collide, minus health from the enemy
         enemy_hit_group = pygame.sprite.groupcollide(enemy_group, sword_group, False, False)
         for self in enemy_hit_group:
-            self.health -= random.randint(1,3) # Makes the sword do a random amount of damage between 1 and 3 (such low damage so that the enemy doesnt die instantly)- the damage done is minused off the enemy's health. Need to use a data hiding method here (do self.health -= mySword.damage) but there is no mySword as it is a local variable - need a fix
+            self.health -= random.randint(1,3) # Makes the sword do a random amount of damage between 1 and 3 (such low damage so that the enemy doesnt die instantly) - the damage done is minused off the enemy's health. Need to use a data hiding method here (do self.health -= mySword.damage) but there is no mySword as it is a local variable - need a fix
             if self.health > 0:
                 print("Enemy Health: " + str(self.health))
             else:
@@ -179,9 +197,6 @@ class enemy(pygame.sprite.Sprite):
                 key_group.add(myKey)
                 all_sprites_group.add(myKey)
                 self.kill()
-        
-    def getHealth(self):
-        return self.health
 
 # Making the sword class
 class sword(pygame.sprite.Sprite):
@@ -245,9 +260,46 @@ class portal(pygame.sprite.Sprite):
     # Call changelevel() when the player collides with the portal
     def update(self):
         if pygame.sprite.spritecollide(self, player_group, False):
+            self.kill()
             for i in range(0,4):
                 myEnemy = enemy(YELLOW, 40, 40, 20, 20, random.randint(0,440) or random.randint(620,1200), random.randint(0,320) or random.randint(500,1000))
+                enemy_group.add(myEnemy)
+                all_sprites_group.add(myEnemy)
 
+class bullet(pygame.sprite.Sprite):
+    # Define the constructor for invader
+    def __init__(self, color, width, height, x, y):
+        # Call the sprite constructor
+        super().__init__()
+        # Create a sprite and fill it with colour
+        self.image = pygame.Surface([width,height])
+        self.image.fill(color)
+        # Set the position of the sprite
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+    def update(self):
+        # Makes the bullets travel right if they are bullets from the left walls and vice versa
+        for self in bulletleft_group:
+            self.rect.x += 3
+        for self in bulletright_group:
+            self.rect.x -= 3
+
+# Draw player attributes - health, money, keys - need a function here because for some reason this is run before the instantiation without it creating a "NameError: name 'myPlayer' is not defined" error message
+def displaytext():
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(("HEALTH: " + str(myPlayer.health)), 1, WHITE)
+    screen.blit(text, (10, 15))
+
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(("MONEY: " + str(myPlayer.money)), 1, WHITE)
+    screen.blit(text, (10, 25))
+
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(("KEYS: " + str(myPlayer.keys)), 1, WHITE)
+    screen.blit(text, (10, 35))
+
+    
 # INSTANTATION CODE
 
 # CREATING THE LAYOUT OF THE GAME USING A LIST 
@@ -365,24 +417,13 @@ while not done:
     # Draws all the sprites
     all_sprites_group.draw(screen)
 
-    # Draw player attributes - health, money, keys
-    font = pygame.font.Font('freesansbold.ttf', 17)
-    text = font.render(("HEALTH: " + str(myPlayer.health)), 1, WHITE)
-    screen.blit(text, (5, 5))
-
-    font = pygame.font.Font('freesansbold.ttf', 17)
-    text = font.render(("MONEY: " + str(myPlayer.money)), 1, WHITE)
-    screen.blit(text, (5, 20))
-
-    font = pygame.font.Font('freesansbold.ttf', 17)
-    text = font.render(("KEYS: " + str(myPlayer.keys)), 1, WHITE)
-    screen.blit(text, (5, 35))
+    displaytext()
 
     # Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
     
     # Limit to 60 frames per second
     clock.tick(60)
- 
+
 # Close the window and quit.
 pygame.quit()
