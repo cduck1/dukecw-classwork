@@ -131,9 +131,12 @@ class player(pygame.sprite.Sprite):
             all_sprites_group.add(mySword)
             sword.swordavaliable = False
     
-    # Get methods
+    # Get and set methods
     def getHealth(self):
         return self.health
+
+    def setHealth(self):
+        input = self.health
 
     def getKeys(self):
         return self.keys
