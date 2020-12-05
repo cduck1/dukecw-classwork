@@ -130,32 +130,6 @@ class player(pygame.sprite.Sprite):
             sword_group.add(mySword)
             all_sprites_group.add(mySword)
             sword.swordavaliable = False
-    
-    # Get and set methods
-    def getHealth(self):
-        return self.health
-
-    def setHealth(self, health):
-        self.health = health
-
-    def getKeys(self):
-        return self.keys
-
-    def getMoney(self):
-        return self.money
-
-    def getX(self):
-        return self.rect.x
-
-    def getY(self):
-        return self.rect.y
-
-    def getChangeX(self):
-        return self.change_x
-
-    def getChangeY(self):
-        return self.change_y
-
 
 # Making the wall class
 class outerwall(pygame.sprite.Sprite):
@@ -356,7 +330,6 @@ for i in range (0,750):
 
 # MAIN PROGRAM LOOP
 # Loop until the user clicks the close button.
-done = False
 while not done:
     # Main event loop
     for event in pygame.event.get():
@@ -376,8 +349,7 @@ while not done:
     else:
         sword.swordavaliable = True # A new sword can only be made while the player isn't holding down SPACE - otherwise infinite swords are created but they are all on top of each other
 
-
-     # Game logic should go here
+    # Game logic should go here
     all_sprites_group.update()
 
     # Screen-clearing code goes here
