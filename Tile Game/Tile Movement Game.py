@@ -285,20 +285,6 @@ class bullet(pygame.sprite.Sprite):
         for self in bulletright_group:
             self.rect.x -= 3
 
-# Draw player attributes - health, money, keys - need a function here because for some reason this is run before the instantiation without it creating a "NameError: name 'myPlayer' is not defined" error message
-def displaytext():
-    font = pygame.font.Font('freesansbold.ttf', 10)
-    text = font.render(("HEALTH: " + str(myPlayer.health)), 1, WHITE)
-    screen.blit(text, (10, 15))
-
-    font = pygame.font.Font('freesansbold.ttf', 10)
-    text = font.render(("MONEY: " + str(myPlayer.money)), 1, WHITE)
-    screen.blit(text, (10, 25))
-
-    font = pygame.font.Font('freesansbold.ttf', 10)
-    text = font.render(("KEYS: " + str(myPlayer.keys)), 1, WHITE)
-    screen.blit(text, (10, 35))
-
     
 # INSTANTATION CODE
 
@@ -356,26 +342,26 @@ for i in range (0,750):
         temp_x = 0
         temp_y = temp_y + 40
         # 1s in the array represent outer walls
-    if level1 == 1:
+    if level1[i] == 1:
         myOuterWall = outerwall(RED, 40, 40, temp_x, temp_y)
         outerwall_group.add(myOuterWall)
         allwall_group.add(myOuterWall)
         all_sprites_group.add(myOuterWall)
     # 2s in the array represent inner walls
-    if level1 == 2:
+    if level1[i] == 2:
         myInnerWall = innerwall(RED, 40, 40, temp_x, temp_y)
         innerwall_group.add(myInnerWall)
         allwall_group.add(myInnerWall)
         all_sprites_group.add(myInnerWall)
     # 3s in the array represent the starting position of the player
-    if level1 == 3:
+    if level1[i] == 3:
         # Instantiate the player class - colour, width, height, x, y, speed
         myPlayer = player(BLUE, 40, 40, 20, 20, temp_x, temp_y)
         # Add the player to a player group and an all sprites group
         player_group.add(myPlayer)
         all_sprites_group.add(myPlayer)
     # 4s in the array represent the starting positions on the enemies
-    if level1 == 4:
+    if level1[i] == 4:
         myEnemy = enemy(YELLOW, 40, 40, 20, 20, temp_x, temp_y)
         enemy_group.add(myEnemy)
         all_sprites_group.add(myEnemy)
@@ -417,7 +403,18 @@ while not done:
     # Draws all the sprites
     all_sprites_group.draw(screen)
 
-    displaytext()
+    # Draw player attributes - health, money, keys - need a function here because for some reason this is run before the instantiation without it creating a "NameError: name 'myPlayer' is not defined" error message
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(("HEALTH: " + str(myPlayer.health)), 1, WHITE)
+    screen.blit(text, (10, 15))
+
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(("MONEY: " + str(myPlayer.money)), 1, WHITE)
+    screen.blit(text, (10, 25))
+
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(("KEYS: " + str(myPlayer.keys)), 1, WHITE)
+    screen.blit(text, (10, 35))
 
     # Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
