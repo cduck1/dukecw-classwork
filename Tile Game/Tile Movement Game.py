@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 
 # Defining Colours
 BLACK = (0,0,0)
@@ -122,6 +123,7 @@ class player(pygame.sprite.Sprite):
             portal_group.add(myPortal)
             all_sprites_group.add(myPortal)
             self.keys = 0
+            print("Portal has opened")
 
     # Instantating the sword
     def spawnsword(self):
@@ -146,15 +148,20 @@ class outerwall(pygame.sprite.Sprite):
     def update(self):
         # The outer walls shoot bullets and the player must dodge them
         # Walls on the right shoot bullets from the right and vice virsa
+        # We use start and now variables so the pubblets only shoot every 3 seconds
+        start = pygame.time.get_ticks()
         for self in outerwall_group:
+            now = pygame.time.get_ticks()
             # If the wall is on the left side of the map, spawn a leftbullet that travels right
-            if self.rect.x == 0:
+            if (now - start > 3000) and (self.rect.x == 0):
+                start = now
                 myBulletLeft = bullet(RED, 15, 15, self.rect.x + 40, self.rect.y + 20)
                 bulletleft_group.add(myBulletLeft)
                 bullet_group.add(myBulletLeft)
                 all_sprites_group.add(myBulletLeft)
             # If the wall is on the right side of the map, spawn a rightbullet that travels left
-            if self.rect.x == 960:
+            if (now - start > 3000) and (self.rect.x == 960):
+                start = now
                 myBulletRight = bullet(RED, 15, 15, self.rect.x - 60, self.rect.y + 20)
                 bulletright_group.add(myBulletRight)
                 bullet_group.add(myBulletRight)
@@ -257,14 +264,23 @@ class portal(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
     
-    # Call changelevel() when the player collides with the portal
+    # When the player collides with the portal, new 4 new enemies are spawned in random places on the map
     def update(self):
         if pygame.sprite.spritecollide(self, player_group, False):
             self.kill()
-            for i in range(0,4):
-                myEnemy = enemy(YELLOW, 40, 40, 20, 20, random.randint(0,440) or random.randint(620,1200), random.randint(0,320) or random.randint(500,1000))
-                enemy_group.add(myEnemy)
-                all_sprites_group.add(myEnemy)
+            myEnemy = enemy(YELLOW, 40, 40, 20, 20, 80, 80)
+            enemy_group.add(myEnemy)
+            all_sprites_group.add(myEnemy)
+            myEnemy = enemy(YELLOW, 40, 40, 20, 20, 80, 880)
+            enemy_group.add(myEnemy)
+            all_sprites_group.add(myEnemy)
+            myEnemy = enemy(YELLOW, 40, 40, 20, 20, 1080, 80)
+            enemy_group.add(myEnemy)
+            all_sprites_group.add(myEnemy)
+            myEnemy = enemy(YELLOW, 40, 40, 20, 20, 1080, 880)
+            enemy_group.add(myEnemy)
+            all_sprites_group.add(myEnemy)
+
 
 class bullet(pygame.sprite.Sprite):
     # Define the constructor for invader
