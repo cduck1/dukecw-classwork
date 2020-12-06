@@ -60,8 +60,8 @@ class player(pygame.sprite.Sprite):
         self.change_x = 0
         self.change_y = 0
         # Variables
-        self.health = 300
-        self.money = 0
+        self.health = 100
+        self.points = 0
         self.keys = 0
  
     # Change the x and y speed of the player
@@ -155,7 +155,6 @@ class outerwall(pygame.sprite.Sprite):
                 bullet_group.add(myBulletLeft)
                 all_sprites_group.add(myBulletLeft)
                 
-
 class innerwall(outerwall):
     pass
 
@@ -252,10 +251,11 @@ class portal(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
     
-    # When the player collides with the portal, new 4 new enemies are spawned in random places on the map
+    # When the player collides with the portal, new 4 new enemies are spawned in random places on the map, and the player gains 50 points
     def update(self):
         if pygame.sprite.spritecollide(self, player_group, False):
             self.kill()
+            myPlayer.points += 50
             myEnemy = enemy(YELLOW, 40, 40, 20, 20, 80, 80)
             enemy_group.add(myEnemy)
             all_sprites_group.add(myEnemy)
@@ -286,14 +286,14 @@ class bullet(pygame.sprite.Sprite):
         # Makes the bullets travel right if they are bullets from the left walls and vice versa
         for self in bulletleft_group:
             self.rect.x += 1
-        for self in bulletright_group:
-            self.rect.x -= 1
-        # If the bullet goes of the screen, it gets removed
+        # If the bullet collides with the player, -20 health off the player and kill the bullet
         for self in bullet_group:
-            if self.rect.x < 40 or self.rect.x > 1140:
-                self.kill()
-        # If the bullet collides with the player, -20 health off the player and die
-
+            if pygame.sprite.groupcollide(bullet_group, player_group, True, False):
+                myPlayer.health -= 20
+        # If the bullet hits any wall, including outer walls, kill it
+        for self in bullet_group:
+            if pygame.sprite.groupcollide(bullet_group, allwall_group, True, False):
+                pass
     
 # INSTANTATION CODE
 
@@ -418,7 +418,7 @@ while not done:
     screen.blit(text, (10, 15))
 
     font = pygame.font.Font('freesansbold.ttf', 10)
-    text = font.render(("MONEY: " + str(myPlayer.money)), 1, WHITE)
+    text = font.render(("POINTS: " + str(myPlayer.points)), 1, WHITE)
     screen.blit(text, (10, 25))
 
     font = pygame.font.Font('freesansbold.ttf', 10)
