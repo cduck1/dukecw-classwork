@@ -1,6 +1,7 @@
 import pygame
 import random
 import time
+import os
 
 # Defining Colours
 BLACK = (0,0,0)
@@ -13,6 +14,14 @@ PINK = (255,20,147)
 PURPLE = (138,43,226)
 
 pygame.init()
+
+# Load the files as declare the variables as these
+#PLAYER_IMAGE = pygame.image.load("playerspritestill.png").convert()
+#SWORD_IMAGE = pygame.image.load("swordsprite.png").convert()
+
+current_path = os.path.dirname("__file__")#where this file is located
+image_path = os.path.join(current_path, 'images')
+BACKGROUND_IMAGE = pygame.image.load(os.path.join(image_path, 'spacebackgroundimage.png'))
 
 # Set the screen width and height
 size = (1200,1000)
@@ -441,10 +450,9 @@ while not done:
     # Here, we clear the screen to white. Don't put other drawing commands
     # above this, or they will be erased with this command.
     
-    # If you want a background image, replace this clear with blit'ing the
-    # background image.
+
     # Making the screen background black
-    screen.fill(BLACK)
+    screen.fill(BACKGROUND_IMAGE)
 
     # Draws all the sprites
     all_sprites_group.draw(screen)
