@@ -307,25 +307,30 @@ def endgame():
     for myWall in allwall_group:
         myWall.kill()
     for myEnemy in enemy_group:
-        myEnemy.kill()        
+        myEnemy.kill()
+    screen.fill(BLACK)
     # Draw "GAME OVER"
-    font = pygame.font.Font('freesansbold.ttf', 10)
+    font = pygame.font.Font('freesansbold.ttf', 50)
     text = font.render(("GAME OVER"), 1, WHITE)
-    screen.blit(text, (10, 15))
+    screen.blit(text, (500, 500))
+    pygame.display.flip()
+    time.sleep(3)
+    pygame.quit()
+
     
 # Draw player attributes - health, money, keys
 def displaytext():
-    font = pygame.font.Font('freesansbold.ttf', 10)
+    font = pygame.font.Font('freesansbold.ttf', 15)
     text = font.render(("HEALTH: " + str(myPlayer.health)), 1, WHITE)
     screen.blit(text, (10, 15))
 
-    font = pygame.font.Font('freesansbold.ttf', 10)
+    font = pygame.font.Font('freesansbold.ttf', 15)
     text = font.render(("POINTS: " + str(myPlayer.points)), 1, WHITE)
-    screen.blit(text, (10, 25))
+    screen.blit(text, (10, 30))
 
-    font = pygame.font.Font('freesansbold.ttf', 10)
+    font = pygame.font.Font('freesansbold.ttf', 15)
     text = font.render(("KEYS: " + str(myPlayer.keys)), 1, WHITE)
-    screen.blit(text, (10, 35))
+    screen.blit(text, (10, 45))
     
 # INSTANTATION CODE
 
@@ -430,7 +435,7 @@ while not done:
 
     # Game logic should go here
     all_sprites_group.update()
-
+    
     # Screen-clearing code goes here
     
     # Here, we clear the screen to white. Don't put other drawing commands
