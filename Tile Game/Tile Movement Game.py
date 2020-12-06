@@ -146,22 +146,17 @@ class outerwall(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
     def update(self):
-        # The outer walls shoot bullets and the player must dodge them
+        # The right walls shoot bullets and the player must dodge them
         # Walls on the right shoot bullets from the right and vice virsa
-        # We use start and now variables so the pubblets only shoot every 3 seconds
-        start = pygame.time.get_ticks()
         for self in outerwall_group:
-            now = pygame.time.get_ticks()
             # If the wall is on the left side of the map, spawn a leftbullet that travels right
-            if (now - start > 3000) and (self.rect.x == 0):
-                start = now
+            if (random.randint(0,50000) == 1) and (self.rect.x == 0):
                 myBulletLeft = bullet(RED, 15, 15, self.rect.x + 40, self.rect.y + 20)
                 bulletleft_group.add(myBulletLeft)
                 bullet_group.add(myBulletLeft)
                 all_sprites_group.add(myBulletLeft)
             # If the wall is on the right side of the map, spawn a rightbullet that travels left
-            if (now - start > 3000) and (self.rect.x == 960):
-                start = now
+            if (random.randint(0,50000) == 2) and (self.rect.x == 960):
                 myBulletRight = bullet(RED, 15, 15, self.rect.x - 60, self.rect.y + 20)
                 bulletright_group.add(myBulletRight)
                 bullet_group.add(myBulletRight)
@@ -297,9 +292,14 @@ class bullet(pygame.sprite.Sprite):
     def update(self):
         # Makes the bullets travel right if they are bullets from the left walls and vice versa
         for self in bulletleft_group:
-            self.rect.x += 3
+            self.rect.x += 1
         for self in bulletright_group:
-            self.rect.x -= 3
+            self.rect.x -= 1
+        # If the bullet goes of the screen, it gets removed
+        for self in bullet_group:
+            if self.rect.x < 40 or self.rect.x > 1140:
+                self.kill()
+        # If the bullet collides with the player, -20 health off the player and die
 
     
 # INSTANTATION CODE
