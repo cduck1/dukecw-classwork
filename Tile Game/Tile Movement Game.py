@@ -147,7 +147,6 @@ class outerwall(pygame.sprite.Sprite):
         self.rect.y = y
     def update(self):
         # The right walls shoot bullets and the player must dodge them
-        # Walls on the right shoot bullets from the right and vice virsa
         for self in outerwall_group:
             # If the wall is on the left side of the map, spawn a leftbullet that travels right
             if (random.randint(0,50000) == 1) and (self.rect.x == 0):
@@ -155,12 +154,6 @@ class outerwall(pygame.sprite.Sprite):
                 bulletleft_group.add(myBulletLeft)
                 bullet_group.add(myBulletLeft)
                 all_sprites_group.add(myBulletLeft)
-            # If the wall is on the right side of the map, spawn a rightbullet that travels left
-            if (random.randint(0,50000) == 2) and (self.rect.x == 960):
-                myBulletRight = bullet(RED, 15, 15, self.rect.x - 60, self.rect.y + 20)
-                bulletright_group.add(myBulletRight)
-                bullet_group.add(myBulletRight)
-                all_sprites_group.add(myBulletRight)
                 
 
 class innerwall(outerwall):
