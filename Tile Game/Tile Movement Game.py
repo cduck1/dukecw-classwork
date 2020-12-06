@@ -125,6 +125,10 @@ class player(pygame.sprite.Sprite):
             self.keys = 0
             print("Portal has opened")
 
+        # If the player's health reaches 0, kill the player and end the game
+        if self.health <= 0:
+            endgame()
+
     # Instantating the sword
     def spawnsword(self):
         # The sword is spawned on the right side of the player
@@ -295,6 +299,34 @@ class bullet(pygame.sprite.Sprite):
             if pygame.sprite.groupcollide(bullet_group, allwall_group, True, False):
                 pass
     
+# When the player's health is 0 (or less), this is called and this wipes the screen and displays "GAME OVER"
+def endgame():
+    myPlayer.kill()
+    for myBullet in bullet_group:
+        myBullet.kill()
+    for myWall in allwall_group:
+        myWall.kill()
+    for myEnemy in enemy_group:
+        myEnemy.kill()        
+    # Draw "GAME OVER"
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(("GAME OVER"), 1, WHITE)
+    screen.blit(text, (10, 15))
+    
+# Draw player attributes - health, money, keys
+def displaytext():
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(("HEALTH: " + str(myPlayer.health)), 1, WHITE)
+    screen.blit(text, (10, 15))
+
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(("POINTS: " + str(myPlayer.points)), 1, WHITE)
+    screen.blit(text, (10, 25))
+
+    font = pygame.font.Font('freesansbold.ttf', 10)
+    text = font.render(("KEYS: " + str(myPlayer.keys)), 1, WHITE)
+    screen.blit(text, (10, 35))
+    
 # INSTANTATION CODE
 
 # CREATING THE LAYOUT OF THE GAME USING A LIST 
@@ -412,18 +444,8 @@ while not done:
     # Draws all the sprites
     all_sprites_group.draw(screen)
 
-    # Draw player attributes - health, money, keys - need a function here because for some reason this is run before the instantiation without it creating a "NameError: name 'myPlayer' is not defined" error message
-    font = pygame.font.Font('freesansbold.ttf', 10)
-    text = font.render(("HEALTH: " + str(myPlayer.health)), 1, WHITE)
-    screen.blit(text, (10, 15))
-
-    font = pygame.font.Font('freesansbold.ttf', 10)
-    text = font.render(("POINTS: " + str(myPlayer.points)), 1, WHITE)
-    screen.blit(text, (10, 25))
-
-    font = pygame.font.Font('freesansbold.ttf', 10)
-    text = font.render(("KEYS: " + str(myPlayer.keys)), 1, WHITE)
-    screen.blit(text, (10, 35))
+    # Draw player attributes - health, money, keys
+    displaytext()
 
     # Go ahead and update the screen with what we've drawn.
     pygame.display.flip()
