@@ -15,13 +15,9 @@ PURPLE = (138,43,226)
 
 pygame.init()
 
-# Load the files as declare the variables as these
-#PLAYER_IMAGE = pygame.image.load("playerspritestill.png").convert()
-#SWORD_IMAGE = pygame.image.load("swordsprite.png").convert()
-
 current_path = os.path.dirname("__file__")#where this file is located
 image_path = os.path.join(current_path, 'images')
-BACKGROUND_IMAGE = pygame.image.load(os.path.join(image_path, 'spacebackgroundimage.png'))
+BACKGROUND_IMAGE = pygame.image.load(os.path.join(image_path, 'dresize.png'))
 
 # Set the screen width and height
 size = (1200,1000)
@@ -38,7 +34,7 @@ player_group = pygame.sprite.Group()
 allwall_group = pygame.sprite.Group()   # All wall group is a group including all inner and outer walls
 outerwall_group = pygame.sprite.Group()
 innerwall_group = pygame.sprite.Group()
-enemy_group = pygame.sprite.Group()
+chest_group = pygame.sprite.Group()
 sword_group = pygame.sprite.Group()
 key_group = pygame.sprite.Group()
 portal_group = pygame.sprite.Group()
@@ -58,9 +54,8 @@ class player(pygame.sprite.Sprite):
     def __init__(self, color, width, height, x_speed, y_speed, x, y):
         # Call the super class (the super class for the player is sprite)
         super().__init__()
-        # Create a sprite and fill it with a colour
-        self.image = pygame.Surface([width,height])
-        self.image.fill(color)
+        # Create a sprite and fill it with a the image
+        self.image = pygame.image.load(os.path.join(image_path, "playersprite.png"))
         # Set the position of the sprite
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -92,15 +87,15 @@ class player(pygame.sprite.Sprite):
                 # Otherwise if we are moving left, do the opposite
                 self.rect.left = wall.rect.right
 
-        # Did we HIT AN ENEMY while moving left/right 
-        enemy_hit_group = pygame.sprite.spritecollide(self, enemy_group, False)
-        for enemy in enemy_hit_group:
-            # If we are moving right, set our right side to the left side of the enemy we hit
+        # Did we HIT AN chest while moving left/right 
+        chest_hit_group = pygame.sprite.spritecollide(self, chest_group, False)
+        for chest in chest_hit_group:
+            # If we are moving right, set our right side to the left side of the chest we hit
             if self.change_x > 0:
-                self.rect.right = enemy.rect.left
+                self.rect.right = chest.rect.left
             else:
                 # Otherwise if we are moving left, do the opposite
-                self.rect.left = enemy.rect.right
+                self.rect.left = chest.rect.right
 
         # Move the player up/down
         self.rect.y += self.change_y
@@ -113,14 +108,14 @@ class player(pygame.sprite.Sprite):
             else:
                 self.rect.top = wall.rect.bottom
 
-        # Did we HIT AN ENEMY while moving up/down
-        enemy_hit_group = pygame.sprite.spritecollide(self, enemy_group, False)
-        for enemy in enemy_hit_group:
+        # Did we HIT AN chest while moving up/down
+        chest_hit_group = pygame.sprite.spritecollide(self, chest_group, False)
+        for chest in chest_hit_group:
             # Reset our position based on the top/bottom of the object.
             if self.change_y > 0:
-                self.rect.bottom = enemy.rect.top
+                self.rect.bottom = chest.rect.top
             else:
-                self.rect.top = enemy.rect.bottom
+                self.rect.top = chest.rect.bottom
 
         # Resets the speed change to 0 every update so that the speed doesn't accelerate infinitely
         self.change_x = 0
@@ -152,9 +147,8 @@ class outerwall(pygame.sprite.Sprite):
     # Define the constructor for the wall class
     def __init__(self, color, width, height, x, y):
         super().__init__()
-        # Create a sprite an fill it with the colour with x and y values
-        self.image = pygame.Surface([width,height])
-        self.image.fill(color)
+        # Create a sprite and fill it with a the image
+        self.image = pygame.image.load(os.path.join(image_path, "walltile2resize.jpg"))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -171,15 +165,14 @@ class outerwall(pygame.sprite.Sprite):
 class innerwall(outerwall):
     pass
 
-# Making the enemy class
-class enemy(pygame.sprite.Sprite):
-    # Define the constructor for the enemy
+# Making the chest class
+class chest(pygame.sprite.Sprite):
+    # Define the constructor for the chest
     def __init__(self, color, width, height, x_speed, y_speed, x, y):
         # Call the super class (the super class for the player is sprite)
         super().__init__()
-        # Create a sprite and fill it with a colour
-        self.image = pygame.Surface([width,height])
-        self.image.fill(color)
+        # Create a sprite and fill it with a the image
+        self.image = pygame.image.load(os.path.join(image_path, "chestspriteresize.png"))
         # Set the position of the sprite
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -188,17 +181,17 @@ class enemy(pygame.sprite.Sprite):
         self.health = 100
 
     def update(self):
-        # If the sword and the enemy collide, minus health from the enemy
-        enemy_hit_group = pygame.sprite.groupcollide(enemy_group, sword_group, False, False)
-        for self in enemy_hit_group:
-            self.health -= random.randint(1,3) # Makes the sword do a random amount of damage between 1 and 3 (such low damage so that the enemy doesnt die instantly) - the damage done is minused off the enemy's health. Need to use a data hiding method here (do self.health -= mySword.damage) but there is no mySword as it is a local variable - need a fix
+        # If the sword and the chest collide, minus health from the chest
+        chest_hit_group = pygame.sprite.groupcollide(chest_group, sword_group, False, False)
+        for self in chest_hit_group:
+            self.health -= random.randint(1,3) # Makes the sword do a random amount of damage between 1 and 3 (such low damage so that the chest doesnt die instantly) - the damage done is minused off the chest's health. Need to use a data hiding method here (do self.health -= mySword.damage) but there is no mySword as it is a local variable - need a fix
             if self.health > 0:
-                print("Enemy Health: " + str(self.health))
+                print("chest Health: " + str(self.health))
             else:
-                print("Enemy is dead")
+                print("chest is dead")
             
-            # Remove the enemy from the screen when it's health = 0 or less
-            # When the enemy dies, spawn a key on its position
+            # Remove the chest from the screen when it's health = 0 or less
+            # When the chest dies, spawn a key on its position
             if self.health < 1:
                 myKey = key(PINK, 20, 20, self.rect.x + 10, self.rect.y + 10)
                 key_group.add(myKey)
@@ -207,20 +200,19 @@ class enemy(pygame.sprite.Sprite):
 
 # Making the sword class
 class sword(pygame.sprite.Sprite):
-    # Define the constructor for the enemy
+    # Define the constructor for the chest
     def __init__(self, color, width, height, x, y):
         # Call the super class (the super class for the player is sprite)
         super().__init__()
-        # Create a sprite and fill it with a colour
-        self.image = pygame.Surface([width,height])
-        self.image.fill(color)
+        # Create a sprite and fill it with the sword image
+        self.image =  pygame.image.load(os.path.join(image_path,"swordresize.png"))
         # Set the position of the sprite
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         # Variables
         self.swordavaliable = True
-        self.damage = random.randint(20,50) # Makes the sword do a random amount of damage between 20 and 60 - the damage done is minused off the enemy's health - doesnt work because myEnemy doesn't exist
+        self.damage = random.randint(20,50) # Makes the sword do a random amount of damage between 20 and 60 - the damage done is minused off the chest's health - doesnt work because mychest doesn't exist
 
     def update(self):
         # While SPACE is being held down, keep the sword in the same position (attached to the right side of the player). If space is not being held down, delete the sword
@@ -233,13 +225,12 @@ class sword(pygame.sprite.Sprite):
 
 # Making the keys class
 class key(pygame.sprite.Sprite):
-    # Define the constructor for the enemy
+    # Define the constructor for the chest
     def __init__(self, color, width, height, x, y):
         # Call the super class (the super class for the player is sprite)
         super().__init__()
-        # Create a sprite and fill it with a colour
-        self.image = pygame.Surface([width,height])
-        self.image.fill(color)
+        # Create a sprite and fill it with a the image
+        self.image = pygame.image.load(os.path.join(image_path, "keyresize.png"))
         # Set the position of the sprite
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -252,13 +243,12 @@ class key(pygame.sprite.Sprite):
 
 # Making a portal class - takes the player to the next level
 class portal(pygame.sprite.Sprite):
-    # Define the constructor for the enemy
+    # Define the constructor for the chest
     def __init__(self, color, width, height, x, y):
         # Call the super class (the super class for the player is sprite)
         super().__init__()
-        # Create a sprite and fill it with a colour
-        self.image = pygame.Surface([width,height])
-        self.image.fill(color)
+        # Create a sprite and fill it with a the image
+        self.image = pygame.image.load(os.path.join(image_path, "netherportalresize.png"))
         # Set the position of the sprite
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -269,18 +259,18 @@ class portal(pygame.sprite.Sprite):
         if pygame.sprite.spritecollide(self, player_group, False):
             self.kill()
             myPlayer.points += 50
-            myEnemy = enemy(YELLOW, 40, 40, 20, 20, 80, 80)
-            enemy_group.add(myEnemy)
-            all_sprites_group.add(myEnemy)
-            myEnemy = enemy(YELLOW, 40, 40, 20, 20, 80, 880)
-            enemy_group.add(myEnemy)
-            all_sprites_group.add(myEnemy)
-            myEnemy = enemy(YELLOW, 40, 40, 20, 20, 1080, 80)
-            enemy_group.add(myEnemy)
-            all_sprites_group.add(myEnemy)
-            myEnemy = enemy(YELLOW, 40, 40, 20, 20, 1080, 880)
-            enemy_group.add(myEnemy)
-            all_sprites_group.add(myEnemy)
+            mychest = chest(YELLOW, 40, 40, 20, 20, 80, 80)
+            chest_group.add(mychest)
+            all_sprites_group.add(mychest)
+            mychest = chest(YELLOW, 40, 40, 20, 20, 80, 880)
+            chest_group.add(mychest)
+            all_sprites_group.add(mychest)
+            mychest = chest(YELLOW, 40, 40, 20, 20, 1080, 80)
+            chest_group.add(mychest)
+            all_sprites_group.add(mychest)
+            mychest = chest(YELLOW, 40, 40, 20, 20, 1080, 880)
+            chest_group.add(mychest)
+            all_sprites_group.add(mychest)
 
 
 class bullet(pygame.sprite.Sprite):
@@ -288,9 +278,7 @@ class bullet(pygame.sprite.Sprite):
     def __init__(self, color, width, height, x, y):
         # Call the sprite constructor
         super().__init__()
-        # Create a sprite and fill it with colour
-        self.image = pygame.Surface([width,height])
-        self.image.fill(color)
+        self.image = pygame.image.load(os.path.join(image_path, "bulletbillresize.png"))
         # Set the position of the sprite
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -307,6 +295,13 @@ class bullet(pygame.sprite.Sprite):
         for self in bullet_group:
             if pygame.sprite.groupcollide(bullet_group, allwall_group, True, False):
                 pass
+        # If the bullet hits any chest, including outer walls, kill it
+        for self in bullet_group:
+            if pygame.sprite.groupcollide(bullet_group, chest_group, True, False):
+                pass
+        for self in bullet_group:
+            if pygame.sprite.groupcollide(bullet_group, portal_group, True, False):
+                pass
     
 # When the player's health is 0 (or less), this is called and this wipes the screen and displays "GAME OVER"
 def endgame():
@@ -315,8 +310,8 @@ def endgame():
         myBullet.kill()
     for myWall in allwall_group:
         myWall.kill()
-    for myEnemy in enemy_group:
-        myEnemy.kill()
+    for mychest in chest_group:
+        mychest.kill()
     screen.fill(BLACK)
     # Draw "GAME OVER"
     font = pygame.font.Font('freesansbold.ttf', 50)
@@ -353,7 +348,7 @@ def displaytext():
 # 1 = outer wall present
 # 2 = inner wall present
 # 3 = player start point
-# 4 = enemy start point
+# 4 = chest start point
 level1 =   [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             1,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,1,
@@ -417,9 +412,9 @@ for i in range (0,750):
         all_sprites_group.add(myPlayer)
     # 4s in the array represent the starting positions on the enemies
     if level1[i] == 4:
-        myEnemy = enemy(YELLOW, 40, 40, 20, 20, temp_x, temp_y)
-        enemy_group.add(myEnemy)
-        all_sprites_group.add(myEnemy)
+        mychest = chest(YELLOW, 40, 40, 20, 20, temp_x, temp_y)
+        chest_group.add(mychest)
+        all_sprites_group.add(mychest)
 
 # MAIN PROGRAM LOOP
 # Loop until the user clicks the close button.
@@ -449,11 +444,11 @@ while not done:
     
     # Here, we clear the screen to white. Don't put other drawing commands
     # above this, or they will be erased with this command.
-    
 
     # Making the screen background black
-    screen.fill(BACKGROUND_IMAGE)
-
+    screen.fill(BLACK)
+    # Draws the background image
+    screen.blit(BACKGROUND_IMAGE, [0,0])
     # Draws all the sprites
     all_sprites_group.draw(screen)
 
