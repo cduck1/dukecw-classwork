@@ -186,9 +186,9 @@ class chest(pygame.sprite.Sprite):
         for self in chest_hit_group:
             self.health -= random.randint(1,3) # Makes the sword do a random amount of damage between 1 and 3 (such low damage so that the chest doesnt die instantly) - the damage done is minused off the chest's health. Need to use a data hiding method here (do self.health -= mySword.damage) but there is no mySword as it is a local variable - need a fix
             if self.health > 0:
-                print("chest Health: " + str(self.health))
+                print("Chest Health: " + str(self.health))
             else:
-                print("chest is dead")
+                print("Chest is dead")
             
             # Remove the chest from the screen when it's health = 0 or less
             # When the chest dies, spawn a key on its position
